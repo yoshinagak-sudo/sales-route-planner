@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>営業訪問プランナー — サービス概要</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
+  <base href="file:///Users/butaifarm/Desktop/system-dev/sales-route-planner/docs/" />
+  <style>
+:root {
+  --brand: #2F6B3D;
+  --brand-dark: #1E4A2A;
+  --accent: #E8A83A;
+  --danger: #C23B22;
+  --bg: #F7F6F1;
+  --fg: #1f1f1d;
+  --muted: #6b6b65;
+  --border: #e6e3da;
+  --card: #ffffff;
+}
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body {
+  font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", system-ui, -apple-system, sans-serif;
+  font-size: 10.5pt;
+  line-height: 1.7;
+  color: var(--fg);
+  background: white;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+h1, h2, h3 { font-family: "Noto Sans JP", "Hiragino Sans", "Yu Gothic", sans-serif; line-height: 1.4; }
+h1 {
+  font-size: 22pt;
+  color: var(--brand);
+  border-bottom: 3px solid var(--brand);
+  padding-bottom: 6px;
+  margin: 0 0 6px 0;
+  page-break-after: avoid;
+}
+h2 {
+  font-size: 14pt;
+  color: var(--brand-dark);
+  margin: 28px 0 10px;
+  padding-left: 10px;
+  border-left: 4px solid var(--brand);
+  page-break-after: avoid;
+}
+h3 {
+  font-size: 12pt;
+  color: var(--brand-dark);
+  margin: 18px 0 6px;
+  page-break-after: avoid;
+}
+p { margin: 6px 0 10px; }
+ul, ol { margin: 6px 0 12px; padding-left: 22px; }
+li { margin: 3px 0; }
+strong { color: var(--brand-dark); font-weight: 700; }
+em { color: var(--muted); }
+hr { border: none; border-top: 1px dashed var(--border); margin: 18px 0; }
+blockquote {
+  background: #f3f1ea;
+  border-left: 4px solid var(--accent);
+  padding: 10px 14px;
+  margin: 14px 0;
+  border-radius: 4px;
+  color: var(--muted);
+  font-size: 10pt;
+}
+blockquote > p { margin: 0; }
+table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 12px 0;
+  font-size: 9.5pt;
+}
+th, td {
+  border: 1px solid var(--border);
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+}
+th {
+  background: var(--brand);
+  color: white;
+}
+code { font-family: "JetBrains Mono", "Menlo", monospace; font-size: 9.5pt; background: #f3f1ea; padding: 1px 5px; border-radius: 3px; }
+pre { background: #f3f1ea; padding: 10px 12px; border-radius: 6px; overflow-x: auto; }
+img { max-width: 100%; border: 1px solid var(--border); border-radius: 6px; margin: 8px 0; page-break-inside: avoid; }
+a { color: var(--brand); }
+.tagline {
+  background: linear-gradient(120deg, var(--brand) 0%, var(--brand-dark) 100%);
+  color: white;
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-weight: 600;
+  margin: 6px 0 16px;
+}
+.tagline a { color: var(--accent); }
+
+/* 印刷時の改ページ制御 */
+h2 { page-break-before: auto; }
+img, table, blockquote { page-break-inside: avoid; }
+</style>
+</head>
+<body>
+<h1>営業訪問プランナー — サービス概要</h1>
+<blockquote>
+<p><strong>営業現場の「移動・記録・履歴」をポケット1つに</strong>
+地図で取引先を可視化し、訪問先で3秒のメモ、取引先ごとに商談タイムラインを時系列閲覧。</p>
+</blockquote>
+<p>🔗 デモ: <strong><a href="http://localhost:3001">http://localhost:3001</a></strong>（ローカル動作中。クライアント共有版は Vercel デプロイ後に URL 差し替え予定）</p>
+<hr>
+<h2>解決する課題</h2>
+<p>営業活動でよく発生する「3つの抜け漏れ」を1つのアプリで吸収します。</p>
+<ul>
+<li><strong>訪問後にメモを書けない</strong>: 移動・次の訪問先準備で時間が消え、商談内容の細部が記憶から落ちる</li>
+<li><strong>どこから回るか考える負担</strong>: 当日の訪問先5件を地図で見て、近い順で組み立てたいが既存ツールだと一覧表とにらめっこ</li>
+<li><strong>過去の商談が頭から消える</strong>: 半年ぶりの取引先に行く前に「最後に何を話したか」を電話で同僚に確認している</li>
+</ul>
+<hr>
+<h2>概要画面</h2>
+<p><img src="screenshots/desktop-home.png" alt="ホーム画面"></p>
+<p>ホームには「今日の訪問」「未記録の訪問」「60日以上停滞している重要取引先」の3バッジが並びます。停滞バッジが赤で点灯していれば、その日のうちに優先して訪問すべき取引先がいるサインです。下部には今日のルートと停滞中の取引先一覧が時刻順・経過日数順で並びます。</p>
+<hr>
+<h2>主な機能</h2>
+<h3>1. 取引先マップ（ランク × 停滞日数の2軸ピン色分け）</h3>
+<p><img src="screenshots/desktop-map.png" alt="取引先マップ"></p>
+<p>仙台エリアの取引先10件を地図上にピン表示。<strong>Aランク × 60日超 → 赤</strong>、Aランク → 濃緑、Bランク × 90日超 → アンバー、Bランク → 緑、Cランク → グレーの2軸合成で、訪問漏れリスクが赤で一目でわかります。ピンをタップすると会社名・最終訪問日・「詳細を見る」リンクがポップアップ表示されます。</p>
+<h3>2. 訪問記録クイック（音声・テキスト両対応）</h3>
+<p>取引先詳細から「✓ 訪問を開始」をワンタップすると、現在地と時刻を自動記録して訪問記録フォームに遷移。フォーム最上部に画面幅いっぱいの大型録音ボタン、その下にテキストメモ欄、用件選択（新規提案/フォロー/クレーム対応/関係維持/契約/納品）、次のアクション欄を配置。画面下部固定の「✓ 訪問を終了する」ボタンで1タップ完了。</p>
+<h3>3. 取引先ごとの商談タイムライン</h3>
+<p><img src="screenshots/desktop-account-detail.png" alt="取引先詳細"></p>
+<p>取引先詳細ページに、過去の訪問履歴・進行中の商談・主要な担当者を一画面で表示。「最後に誰が来て、何を話したか」を着く前に確認できます。最終訪問からの経過日数が60日を超えていると赤強調で表示され、優先度が直感的に伝わります。</p>
+<h3>4. 停滞バッジで訪問漏れを防止</h3>
+<p>ホーム画面の停滞バッジは「Aランクかつ60日以上未訪問」の取引先を自動集計。重要顧客への接触が空いている状態を毎朝アプリを開いた瞬間に把握できます。</p>
+<hr>
+<h2>モバイル画面</h2>
+<p><img src="screenshots/mobile-home.png" alt="モバイル画面"></p>
+<p>iPhone / iPad での屋外利用を前提に、深緑（Primary）と稲穂アンバー（Accent）の高コントラスト配色を採用。日光下でも視認性が落ちないよう、白系の薄色は使わず、タップ領域は最小48px・主要CTAは64px以上で設計しています。下部タブバーで「ホーム / 地図 / 訪問 / 管理」を片手で切替できます。</p>
+<hr>
+<h2>管理ダッシュボード</h2>
+<p><img src="screenshots/desktop-admin.png" alt="管理ダッシュボード"></p>
+<p>取引先・連絡先・営業ユーザーのマスタを一覧表示。タブ切替で対象を変更でき、CSV エクスポート機能でクライアント別のデータ差し替えやバックアップが可能です。</p>
+<hr>
+<h2>触り方（クライアント向けデモガイド）</h2>
+<p>90 秒で価値を体感できる動線:</p>
+<ol>
+<li><strong>ホーム画面</strong>を開く → 「停滞 1社」赤バッジが点灯（焼肉 大吉、162日未訪問）</li>
+<li>**「地図で取引先を見る」**をタップ → 仙台市内10件のピンが表示、赤ピンが1個目立つ</li>
+<li>赤ピンをタップ → ポップアップで「詳細を見る」→ <strong>取引先詳細ページ</strong></li>
+<li>「最終訪問: 162日前」が赤強調、「✓ 訪問を開始」ボタンを押す</li>
+<li><strong>訪問記録クイック画面</strong>で音声録音 or テキスト入力、用件「フォロー」を選択</li>
+<li>下部「✓ 訪問を終了する」ボタンをタップ → ホームに戻り「今日の訪問」件数が更新</li>
+</ol>
+<p>ヘッダー右上の <strong>ユーザースイッチャー</strong>で営業担当を切替えると、その担当者の取引先・訪問履歴・停滞バッジに表示が切り替わります。</p>
+<blockquote>
+<p><strong>デモモード</strong> で動作中のため、入力データはサーバー再起動でリセットされます。</p>
+</blockquote>
+
+</body>
+</html>
