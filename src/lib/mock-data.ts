@@ -463,6 +463,42 @@ export const mockVisits: Visit[] = [
     arrivedLat: null, arrivedLng: null,
     routePlanId: null, opportunityId: "opp-006",
   },
+  // 山田の今日のルート: 5件構成
+  {
+    id: "vis-017",
+    accountId: "acc-008",
+    ownerId: "usr-01",
+    status: "COMPLETED",
+    purpose: "FOLLOW_UP",
+    scheduledAt: todayAt(9, 0),
+    arrivedAt: todayAt(9, 5),
+    leftAt: todayAt(9, 40),
+    durationMin: 35,
+    arrivedLat: 35.7050, arrivedLng: 139.6196,
+    routePlanId: "rp-001", opportunityId: null,
+  },
+  {
+    id: "vis-018",
+    accountId: "acc-005",
+    ownerId: "usr-01",
+    status: "PLANNED",
+    purpose: "FOLLOW_UP",
+    scheduledAt: todayAt(11, 30),
+    arrivedAt: null, leftAt: null, durationMin: null,
+    arrivedLat: null, arrivedLng: null,
+    routePlanId: "rp-001", opportunityId: "opp-005",
+  },
+  {
+    id: "vis-019",
+    accountId: "acc-003",
+    ownerId: "usr-01",
+    status: "PLANNED",
+    purpose: "NEW_PROPOSAL",
+    scheduledAt: todayAt(15, 30),
+    arrivedAt: null, leftAt: null, durationMin: null,
+    arrivedLat: null, arrivedLng: null,
+    routePlanId: "rp-001", opportunityId: null,
+  },
 ];
 
 // ============= VisitNotes =============
@@ -552,6 +588,13 @@ export const mockVisitNotes: VisitNote[] = [
     extractedNextAction: "A社米粉サンプル取り寄せ", extractedNextActionDate: daysAgo(-7),
     promotedToOpportunity: false, createdAt: daysAgo(1, 13, 45),
   },
+  {
+    id: "note-013", visitId: "vis-017", kind: "TEXT_TYPED",
+    body: "伊藤代表に朝の納品確認＋小麦値上がりの相談継続。同業パン屋（都内3店）の業務用小麦切り替え事例をピックアップ済み、来週月曜に資料持参で再訪。",
+    audioUrl: null, transcribedAt: null,
+    extractedNextAction: "事例資料持参で再訪", extractedNextActionDate: todayAt(0, 0),
+    promotedToOpportunity: false, createdAt: todayAt(9, 38),
+  },
 ];
 
 // ============= RoutePlans =============
@@ -563,8 +606,8 @@ export const mockRoutePlans: RoutePlan[] = [
     status: "DRAFT",
     startLat: 35.6845, startLng: 139.7649, startLabel: "東京本社（大手町）",
     endLat: 35.6845, endLng: 139.7649, endLabel: "東京本社（大手町）",
-    orderedVisitIds: "vis-014,vis-015",
-    totalDistanceM: 12000,
-    totalDurationS: 2100,
+    orderedVisitIds: "vis-017,vis-014,vis-018,vis-015,vis-019",
+    totalDistanceM: 38000,
+    totalDurationS: 5400,
   },
 ];
