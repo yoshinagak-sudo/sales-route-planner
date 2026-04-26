@@ -24,7 +24,7 @@ const notoJp = Noto_Sans_JP({
 });
 
 export const metadata: Metadata = {
-  title: "営業訪問プランナー",
+  title: "営業管理アプリ",
   description:
     "地図で取引先を可視化し、訪問記録を3秒で残すデモ用Webアプリ (sales-route-planner)",
 };
@@ -58,7 +58,7 @@ export default async function RootLayout({
               <Link
                 href="/"
                 className="flex items-center gap-2 font-heading font-bold tracking-tight"
-                aria-label="営業訪問プランナー ホーム"
+                aria-label="営業管理アプリ ホーム"
               >
                 <span className="grid size-8 place-items-center rounded-md bg-brand text-brand-foreground">
                   <svg
@@ -76,7 +76,7 @@ export default async function RootLayout({
                   </svg>
                 </span>
                 <span className="hidden sm:inline text-base">
-                  営業訪問プランナー
+                  営業管理アプリ
                 </span>
                 {isDemo && (
                   <span className="ml-1 inline-flex items-center rounded-full bg-accent-amber/20 px-1.5 py-0.5 text-[10px] font-semibold tracking-wider text-accent-amber-foreground">

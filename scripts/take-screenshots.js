@@ -35,6 +35,12 @@ const PAGES = [
     device: 'mobile',
     fullPage: true,
     waitMs: 1500,
+    actions: [
+      { fill: { selector: 'textarea[name="body"]', text: '田中店長と面談。新メニュー導入予定で米使用量1.3倍見込み。来週ひとめぼれ無洗米サンプル送付。' } },
+      { wait: 400 },
+      { click: 'button:has-text("AI で補完")' },
+      { wait: 800 },
+    ],
   },
 
   // デスクトップ
@@ -79,6 +85,12 @@ const PAGES = [
     device: 'desktop',
     fullPage: true,
     waitMs: 1500,
+    actions: [
+      { fill: { selector: 'textarea[name="body"]', text: '田中店長と面談。新メニュー導入予定で米使用量1.3倍見込み。来週ひとめぼれ無洗米サンプル送付。' } },
+      { wait: 400 },
+      { click: 'button:has-text("AI で補完")' },
+      { wait: 800 },
+    ],
   },
   {
     name: 'desktop-route-today',
@@ -104,6 +116,10 @@ async function shoot(ctx, page, p) {
 
   if (p.actions) {
     for (const a of p.actions) {
+      if (a.fill) {
+        await page.fill(a.fill.selector, a.fill.text);
+        await page.waitForTimeout(300);
+      }
       if (a.click) {
         const el = page.locator(a.click).first();
         if (await el.isVisible().catch(() => false)) {
