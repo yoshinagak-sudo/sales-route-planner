@@ -76,8 +76,8 @@ function buildDivIcon(fill: string, stroke: string): L.DivIcon {
 
 export function AccountMap({
   accounts,
-  centerLat = 38.2682,
-  centerLng = 140.8694,
+  centerLat = 35.6812,
+  centerLng = 139.7671,
   zoom = 11,
 }: Props) {
   const [rankFilter, setRankFilter] = React.useState<string | null>(null);

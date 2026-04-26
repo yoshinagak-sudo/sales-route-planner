@@ -25,7 +25,7 @@ cp .env.example .env.local
 # 3. DB migration
 npm run db:migrate
 
-# 4. サンプルデータ投入（仙台の架空取引先10件）
+# 4. サンプルデータ投入（東京の架空取引先10件）
 npm run seed
 
 # 5. 開発サーバ起動
@@ -57,7 +57,7 @@ sales-route-planner/
 ├── prisma/
 │   ├── schema.prisma          # Prisma データモデル
 │   └── seed.ts                # demo-data/*.csv からの投入スクリプト
-├── demo-data/                 # サンプル CSV（仙台10取引先）
+├── demo-data/                 # サンプル CSV（東京10取引先）
 │   ├── accounts.csv
 │   ├── users.csv
 │   ├── visits.csv
