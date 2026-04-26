@@ -1,0 +1,319 @@
+// 営業訪問ルートプランナー Prisma schema
+// 参照: docs/design/sales-route-planner-webapp.md
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =====================
+// ユーザー（営業担当者）
+// =====================
+model User {
+  id         String  @id @default(cuid())
+  email      String  @unique
+  name       String
+  department String?
+
+  homeLat   Float?
+  homeLng   Float?
+  homeLabel String?
+
+  accounts   Account[]   @relation("AccountOwner")
+  visits     Visit[]     @relation("VisitOwner")
+  routePlans RoutePlan[] @relation("RoutePlanOwner")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("user")
+}
+
+// =====================
+// 取引先
+// =====================
+enum AccountRank {
+  A
+  B
+  C
+}
+
+model Account {
+  id       String      @id @default(cuid())
+  name     String
+  nameKana String?
+  rank     AccountRank @default(B)
+  category String?
+
+  billingAddress String
+  geoLat         Float?
+  geoLng         Float?
+  geoUpdatedAt   DateTime?
+
+  phone String?
+  note  String?
+
+  lastVisitAt DateTime?
+
+  ownerId String
+  owner   User   @relation("AccountOwner", fields: [ownerId], references: [id])
+
+  contacts      Contact[]
+  visits        Visit[]
+  opportunities Opportunity[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId])
+  @@index([rank])
+  @@index([lastVisitAt])
+  @@map("account")
+}
+
+// =====================
+// 連絡先
+// =====================
+model Contact {
+  id        String  @id @default(cuid())
+  accountId String
+  account   Account @relation(fields: [accountId], references: [id], onDelete: Cascade)
+
+  name      String
+  nameKana  String?
+  role      String?
+  email     String?
+  phone     String?
+  isPrimary Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([accountId])
+  @@map("contact")
+}
+
+// =====================
+// 商談
+// =====================
+enum OpportunityStatus {
+  OPEN
+  WON
+  LOST
+}
+
+model Opportunity {
+  id        String            @id @default(cuid())
+  accountId String
+  account   Account           @relation(fields: [accountId], references: [id], onDelete: Cascade)
+  title     String
+  status    OpportunityStatus @default(OPEN)
+  amount    Decimal?
+  dueDate   DateTime?
+
+  nextAction     String?
+  nextActionDate DateTime?
+
+  visits Visit[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([accountId, status])
+  @@map("opportunity")
+}
+
+// =====================
+// 訪問
+// =====================
+enum VisitStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  NO_SHOW
+}
+
+enum VisitPurpose {
+  NEW_PROPOSAL
+  FOLLOW_UP
+  COMPLAINT_CARE
+  RELATIONSHIP
+  CONTRACT
+  DELIVERY
+  OTHER
+}
+
+model Visit {
+  id        String  @id @default(cuid())
+  accountId String
+  account   Account @relation(fields: [accountId], references: [id])
+  ownerId   String
+  owner     User    @relation("VisitOwner", fields: [ownerId], references: [id])
+
+  status  VisitStatus   @default(PLANNED)
+  purpose VisitPurpose?
+
+  scheduledAt DateTime
+  arrivedAt   DateTime?
+  leftAt      DateTime?
+  durationMin Int?
+
+  arrivedLat      Float?
+  arrivedLng      Float?
+  arrivalAccuracy Float?
+
+  coVisitorIds  String?
+  metContactIds String?
+
+  opportunityId String?
+  opportunity   Opportunity? @relation(fields: [opportunityId], references: [id])
+  routePlanId   String?
+  routePlan     RoutePlan?   @relation(fields: [routePlanId], references: [id])
+
+  notes       VisitNote[]
+  attachments VisitAttachment[]
+
+  clientUuid String?   @unique
+  syncedAt   DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([accountId])
+  @@index([ownerId, scheduledAt])
+  @@index([status])
+  @@index([routePlanId])
+  @@map("visit")
+}
+
+// =====================
+// 訪問ノート
+// =====================
+enum NoteKind {
+  TEXT_TYPED
+  VOICE_RAW
+  VOICE_CLEANED
+  AI_SUMMARY
+}
+
+model VisitNote {
+  id      String @id @default(cuid())
+  visitId String
+  visit   Visit  @relation(fields: [visitId], references: [id], onDelete: Cascade)
+
+  kind          NoteKind
+  body          String
+  audioUrl      String?
+  transcribedAt DateTime?
+
+  extractedNextAction     String?
+  extractedNextActionDate DateTime?
+  promotedToOpportunity   Boolean   @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([visitId])
+  @@map("visit_note")
+}
+
+// =====================
+// 訪問添付
+// =====================
+enum AttachmentKind {
+  PHOTO
+  BUSINESS_CARD
+  WHITEBOARD
+  DOCUMENT
+}
+
+model VisitAttachment {
+  id      String @id @default(cuid())
+  visitId String
+  visit   Visit  @relation(fields: [visitId], references: [id], onDelete: Cascade)
+
+  kind         AttachmentKind
+  url          String
+  thumbnailUrl String?
+  fileName     String?
+  fileSize     Int?
+
+  ocrText          String?
+  extractedContact Json?
+
+  createdAt DateTime @default(now())
+
+  @@index([visitId])
+  @@map("visit_attachment")
+}
+
+// =====================
+// ルート計画
+// =====================
+enum RoutePlanStatus {
+  DRAFT
+  OPTIMIZED
+  IN_PROGRESS
+  COMPLETED
+  ABANDONED
+}
+
+model RoutePlan {
+  id       String          @id @default(cuid())
+  ownerId  String
+  owner    User            @relation("RoutePlanOwner", fields: [ownerId], references: [id])
+  planDate DateTime
+  status   RoutePlanStatus @default(DRAFT)
+
+  startLat   Float
+  startLng   Float
+  startLabel String
+  endLat     Float
+  endLng     Float
+  endLabel   String
+
+  orderedVisitIds String?
+  totalDistanceM  Int?
+  totalDurationS  Int?
+  optimizedAt     DateTime?
+  optimizerInput  Json?
+
+  visits Visit[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([ownerId, planDate])
+  @@map("route_plan")
+}
+
+// =====================
+// ジオキャッシュ
+// =====================
+model GeoCache {
+  id               String  @id @default(cuid())
+  addressHash      String  @unique
+  rawAddress       String
+  formattedAddress String?
+
+  lat      Float
+  lng      Float
+  placeId  String?
+  accuracy String?
+
+  hitCount   Int      @default(1)
+  lastUsedAt DateTime @default(now())
+
+  accountIds String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([addressHash])
+  @@map("geo_cache")
+}

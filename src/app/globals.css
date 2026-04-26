@@ -1,26 +1,178 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
+
+/* ===========================================
+   ブランドトークン（営業訪問ルートプランナー）
+   - Primary: 深緑 #2F6B3D 屋外日光下で白文字が視認できる濃さ
+   - Accent : 稲穂アンバー #E8A83A 停滞・警告の一次注意に
+   - Danger : 赤 #C23B22 60日超停滞 A など、本当にやばい場所限定
+   - Bg     : #F7F6F1 わずかにオフホワイト、純白は眩しい
+   =========================================== */
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+  --font-heading: var(--font-heading);
+
+  /* ブランドトークン */
+  --color-brand: var(--brand);
+  --color-brand-foreground: var(--brand-foreground);
+  --color-brand-dark: var(--brand-dark);
+  --color-brand-light: var(--brand-light);
+  --color-accent-amber: var(--accent-amber);
+  --color-accent-amber-foreground: var(--accent-amber-foreground);
+  --color-danger: var(--danger);
+  --color-danger-foreground: var(--danger-foreground);
+
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* 基本トーン（白すぎず、緑を一滴落とした業務＋農業の地色） */
+  --background: #f7f6f1;
+  --foreground: #1b2017;
+  --card: #ffffff;
+  --card-foreground: #1b2017;
+  --popover: #ffffff;
+  --popover-foreground: #1b2017;
+
+  /* shadcn の primary は brand と同じ値に寄せる（Button default がブランド緑になる） */
+  --primary: #2f6b3d;
+  --primary-foreground: #ffffff;
+
+  --secondary: #eceae1;
+  --secondary-foreground: #1b2017;
+  --muted: #eceae1;
+  --muted-foreground: #5b6150;
+  --accent: #eceae1;
+  --accent-foreground: #1b2017;
+  --destructive: #c23b22;
+
+  --border: #dfdcd1;
+  --input: #dfdcd1;
+  --ring: #2f6b3d;
+
+  /* ブランドトークン実体 */
+  --brand: #2f6b3d;
+  --brand-foreground: #ffffff;
+  --brand-dark: #1e4a2a;
+  --brand-light: #4a8f58;
+  --accent-amber: #e8a83a;
+  --accent-amber-foreground: #3a2a0a;
+  --danger: #c23b22;
+  --danger-foreground: #ffffff;
+
+  --chart-1: #2f6b3d;
+  --chart-2: #4a8f58;
+  --chart-3: #e8a83a;
+  --chart-4: #c23b22;
+  --chart-5: #5b6150;
+  --radius: 0.625rem;
+
+  --font-sans: var(--font-inter), var(--font-noto-jp), system-ui, sans-serif;
+  --font-heading: var(--font-noto-jp), var(--font-inter), sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1b2017;
+  --sidebar-primary: #2f6b3d;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #eceae1;
+  --sidebar-accent-foreground: #1b2017;
+  --sidebar-border: #dfdcd1;
+  --sidebar-ring: #2f6b3d;
+}
+
+.dark {
+  --background: #121812;
+  --foreground: #eef1e9;
+  --card: #1a211a;
+  --card-foreground: #eef1e9;
+  --popover: #1a211a;
+  --popover-foreground: #eef1e9;
+  --primary: #4a8f58;
+  --primary-foreground: #0c1009;
+  --secondary: #263126;
+  --secondary-foreground: #eef1e9;
+  --muted: #263126;
+  --muted-foreground: #a4ab9c;
+  --accent: #263126;
+  --accent-foreground: #eef1e9;
+  --destructive: #e15c44;
+  --border: #2d372d;
+  --input: #2d372d;
+  --ring: #4a8f58;
+  --sidebar: #1a211a;
+  --sidebar-foreground: #eef1e9;
+  --sidebar-primary: #4a8f58;
+  --sidebar-primary-foreground: #0c1009;
+  --sidebar-accent: #263126;
+  --sidebar-accent-foreground: #eef1e9;
+  --sidebar-border: #2d372d;
+  --sidebar-ring: #4a8f58;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  html {
+    @apply font-sans;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "cv11", "ss01";
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: var(--font-heading);
+    letter-spacing: -0.01em;
+  }
+  /* 数字を揃える（KPIカード・時刻表示で効く） */
+  .tabular-nums {
+    font-variant-numeric: tabular-nums;
+  }
 }

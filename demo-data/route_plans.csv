@@ -1,0 +1,2 @@
+route_plan_id,owner_id,plan_date,status,start_lat,start_lng,start_label,end_lat,end_lng,end_label,ordered_visit_ids,total_distance_m,total_duration_s,optimized_at,created_at
+rp-001,usr-01,2026-04-24,DRAFT,38.2682,140.8694,仙台本社,38.2682,140.8694,仙台本社,"vis-006,vis-007",85000,4200,,2026-04-23 17:00:00

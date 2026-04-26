@@ -1,0 +1,3 @@
+user_id,name,email,department,home_lat,home_lng,home_label
+usr-01,山田 太郎,yamada@demo.local,営業1課,38.2682,140.8694,仙台本社
+usr-02,鈴木 花子,suzuki@demo.local,営業1課,38.2425,140.8859,富沢営業所
