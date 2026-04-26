@@ -483,7 +483,7 @@ export const mockVisitNotes: VisitNote[] = [
     promotedToOpportunity: true, createdAt: daysAgo(18, 11, 53),
   },
   {
-    id: "note-003", visitId: "vis-003", kind: "VOICE_CLEANED",
+    id: "note-003", visitId: "vis-003", kind: "TEXT_TYPED",
     body: "阿部支配人にシェフを交えて朝食ビュッフェ向け米の入れ替えを提案。現状コストは月150万、八重原コシヒカリで品質UPかつコスト維持の試算を提示。シェフ会議で諮るとのこと。次回プレゼン資料を準備。",
     audioUrl: null, transcribedAt: daysAgo(45, 11, 15),
     extractedNextAction: "シェフ会議向け資料準備", extractedNextActionDate: daysAgo(-10),
@@ -504,7 +504,7 @@ export const mockVisitNotes: VisitNote[] = [
     promotedToOpportunity: true, createdAt: daysAgo(9, 14, 22),
   },
   {
-    id: "note-006", visitId: "vis-006", kind: "VOICE_CLEANED",
+    id: "note-006", visitId: "vis-006", kind: "TEXT_TYPED",
     body: "田中店長フォロー訪問。前回提案したひとめぼれ無洗米サンプルの試食結果は好印象。新メニュー導入時期は7月で確定、見積もり提出と試食イベント日程を進める。山口マネージャーも同席で前向き。",
     audioUrl: null, transcribedAt: daysAgo(7, 15, 50),
     extractedNextAction: "見積もり提出と試食日程", extractedNextActionDate: daysAgo(-5),
@@ -532,7 +532,7 @@ export const mockVisitNotes: VisitNote[] = [
     promotedToOpportunity: false, createdAt: daysAgo(3, 15, 5),
   },
   {
-    id: "note-010", visitId: "vis-010", kind: "VOICE_CLEANED",
+    id: "note-010", visitId: "vis-010", kind: "TEXT_TYPED",
     body: "ホテル品川シービュー、阿部支配人と中村氏。シェフ会議の資料一式を持参、コシヒカリ提案へ前向きな反応。価格レンジOK、最終決裁は支配人で来月中に判断。試食会日程調整中。",
     audioUrl: null, transcribedAt: daysAgo(32, 10, 50),
     extractedNextAction: "試食会日程調整＆フォロー連絡", extractedNextActionDate: daysAgo(-15),

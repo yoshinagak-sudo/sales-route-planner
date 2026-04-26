@@ -8,7 +8,6 @@ import {
   VISIT_PURPOSE_LABEL,
   VisitPurpose,
 } from "@/lib/types";
-import { VoiceRecorder } from "@/components/VoiceRecorder";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -66,13 +65,8 @@ export default async function VisitRecordPage({
       </header>
 
       <p className="text-xs text-muted-foreground -mt-2">
-        音声 → メモ → 用件 → 終了 の順で 30 秒以内を目安に。
+        メモ → 用件 → 次のアクション の3項目を埋めて終了するだけ。
       </p>
-
-      {/* 録音ボタン（Phase 1: UI のみ、送信なし） */}
-      <section aria-label="音声録音">
-        <VoiceRecorder />
-      </section>
 
       {/* 終了フォーム（メモ + 用件 + 次アクション + 終了ボタン） */}
       <form action={finish} className="flex flex-col gap-5">
@@ -91,7 +85,7 @@ export default async function VisitRecordPage({
             id="note-body"
             name="body"
             rows={5}
-            placeholder="音声が使えない場合はここに打ち込んでOK&#10;例) サンプル渡し済、来週試食会の日程調整"
+            placeholder="商談内容を簡潔に&#10;例) サンプル渡し済、来週試食会の日程調整"
             className={cn(
               "w-full rounded-lg border border-border bg-card px-3 py-2.5 text-sm leading-relaxed",
               "resize-y min-h-[7rem]",
