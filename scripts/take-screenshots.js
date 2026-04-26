@@ -96,8 +96,8 @@ const PAGES = [
     name: 'desktop-route-today',
     path: '/route-plans/today',
     device: 'desktop',
-    fullPage: false,
-    waitMs: 1500,
+    fullPage: true,
+    waitMs: 3000,
   },
   {
     name: 'desktop-admin',

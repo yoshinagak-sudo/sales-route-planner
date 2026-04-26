@@ -6,6 +6,7 @@ import { formatDateJP, formatTime, formatDistance } from "@/lib/format";
 import { VISIT_PURPOSE_LABEL } from "@/lib/types";
 import { BadgeRank } from "@/components/BadgeRank";
 import { BadgeVisitStatus } from "@/components/BadgeVisitStatus";
+import { RouteMap } from "@/components/RouteMap";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -71,6 +72,37 @@ export default async function TodayRoutePage() {
           )}
         </div>
       )}
+
+      {/* マップ（始点 → 訪問先順 → 帰着 をルート線で結ぶ） */}
+      {(() => {
+        const start = {
+          lat: plan?.startLat ?? me.homeLat ?? 35.6845,
+          lng: plan?.startLng ?? me.homeLng ?? 139.7649,
+          label: plan?.startLabel ?? me.homeLabel ?? "拠点",
+        };
+        const end = {
+          lat: plan?.endLat ?? start.lat,
+          lng: plan?.endLng ?? start.lng,
+          label: plan?.endLabel ?? start.label,
+        };
+        const stops = visits
+          .filter(
+            (v) =>
+              typeof v.account.geoLat === "number" &&
+              typeof v.account.geoLng === "number",
+          )
+          .map((v) => ({
+            visitId: v.id,
+            accountId: v.account.id,
+            name: v.account.name,
+            lat: v.account.geoLat as number,
+            lng: v.account.geoLng as number,
+            status: v.status,
+            scheduledAt: formatTime(v.scheduledAt),
+          }));
+        if (stops.length === 0) return null;
+        return <RouteMap start={start} end={end} stops={stops} />;
+      })()}
 
       {/* デッキ */}
       {visits.length === 0 ? (
