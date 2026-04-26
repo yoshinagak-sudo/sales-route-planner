@@ -29,6 +29,13 @@ const PAGES = [
     fullPage: false,
     waitMs: 1500,
   },
+  {
+    name: 'mobile-visit-record',
+    path: '/visits/vis-014/record',
+    device: 'mobile',
+    fullPage: true,
+    waitMs: 1500,
+  },
 
   // デスクトップ
   {
@@ -62,6 +69,13 @@ const PAGES = [
   {
     name: 'desktop-visit-detail',
     path: '/visits/vis-001',
+    device: 'desktop',
+    fullPage: true,
+    waitMs: 1500,
+  },
+  {
+    name: 'desktop-visit-record',
+    path: '/visits/vis-014/record',
     device: 'desktop',
     fullPage: true,
     waitMs: 1500,
