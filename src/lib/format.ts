@@ -50,7 +50,7 @@ export function isDormant(
   const days = daysSince(lastVisitAt);
   if (days === null) return rank !== "C"; // 未訪問は A/B なら停滞扱い
   if (rank === "A") return days >= DORMANT_DAYS_THRESHOLD;
-  if (rank === "B") return days >= 90;
+  if (rank === "B") return days >= 60;
   return false;
 }
 

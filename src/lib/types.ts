@@ -75,7 +75,7 @@ export const ACCOUNT_RANK_LABEL: Record<string, string> = {
   C: "C（小口）",
 };
 
-export const DORMANT_DAYS_THRESHOLD = 60;
+export const DORMANT_DAYS_THRESHOLD = 30;
 
 // ============= ドメインモデル =============
 

@@ -39,14 +39,14 @@ export function getPinColor(
 } {
   const days = daysSince(lastVisitAt ?? null);
   if (rank === "A") {
-    if (days === null || days >= 60) {
+    if (days === null || days >= 30) {
       // 停滞A -> 赤
       return { fill: "#C23B22", stroke: "#7a2416", label: "A停滞" };
     }
     return { fill: "#1E4A2A", stroke: "#0e2915", label: "A訪問済" }; // 濃緑
   }
   if (rank === "B") {
-    if (days === null || days >= 90) {
+    if (days === null || days >= 60) {
       return { fill: "#E8A83A", stroke: "#8a6318", label: "B停滞" };
     }
     return { fill: "#4A8F58", stroke: "#2f6b3d", label: "B訪問済" };
@@ -213,9 +213,9 @@ function FilterChip({
 
 function MapLegend() {
   const items: { color: string; label: string }[] = [
-    { color: "#C23B22", label: "A停滞 (60日超)" },
+    { color: "#C23B22", label: "A停滞 (30日超)" },
     { color: "#1E4A2A", label: "A訪問済" },
-    { color: "#E8A83A", label: "B停滞 (90日超)" },
+    { color: "#E8A83A", label: "B停滞 (60日超)" },
     { color: "#4A8F58", label: "B訪問済" },
     { color: "#8a8f80", label: "C" },
   ];

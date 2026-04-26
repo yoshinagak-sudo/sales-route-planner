@@ -238,7 +238,7 @@ export default async function AdminPage() {
                 label="停滞 A ランク"
                 value={String(dormantAccountsAll.length)}
                 unit="社"
-                hint={`60日超 / Aランク${mockAccounts.filter((a) => a.rank === "A").length}社中`}
+                hint={`30日超 / Aランク${mockAccounts.filter((a) => a.rank === "A").length}社中`}
                 icon={<AlertTriangle className="size-4" />}
                 tone={dormantAccountsAll.length > 0 ? "danger" : "default"}
               />
@@ -328,7 +328,7 @@ export default async function AdminPage() {
                   id="dormant-heading"
                   className="text-sm font-medium text-muted-foreground"
                 >
-                  停滞アカウント（A × 60日超）
+                  停滞アカウント（A × 30日超）
                 </h2>
                 <span className="ml-auto text-[11px] text-muted-foreground tabular-nums">
                   {dormantAccountsAll.length} 件

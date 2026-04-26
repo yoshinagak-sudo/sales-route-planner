@@ -94,7 +94,7 @@ export default async function HomePage() {
           tone={pending.length > 0 ? "warn" : "default"}
         />
         <SummaryCard
-          label="60日以上停滞 (A)"
+          label="30日以上停滞 (A)"
           value={String(dormant.length)}
           unit="社"
           hint={`担当 ${total} 社中`}
