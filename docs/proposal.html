@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>営業訪問プランナー 企画書 / 舞台ファーム</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: {
+            DEFAULT: '#2F6B3D',
+            dark: '#24532F',
+            light: '#5A8E66',
+            50: '#EEF5F0',
+          },
+          accent: { DEFAULT: '#E8A83A', dark: '#B6831B' },
+          danger: { DEFAULT: '#C23B22', dark: '#932B17' },
+          paper: '#F7F6F1',
+          ink: { DEFAULT: '#1B2017', muted: '#4B544A', soft: '#7A8279' },
+          line: '#D9D7CB',
+        },
+        fontFamily: {
+          sans: ['"Inter"', '"Noto Sans JP"', 'system-ui', 'sans-serif'],
+          jp: ['"Noto Sans JP"', '"Inter"', 'sans-serif'],
+        },
+        boxShadow: {
+          card: '0 1px 2px rgba(27,32,23,0.05), 0 1px 8px rgba(27,32,23,0.04)',
+          phone: '0 20px 48px rgba(27,32,23,0.14), 0 2px 6px rgba(27,32,23,0.06)',
+        },
+      },
+    },
+  };
+</script>
+<style>
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', 'Noto Sans JP', system-ui, sans-serif;
+    background: #F7F6F1;
+    color: #1B2017;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'palt' 1;
+  }
+  h1, h2, h3, h4 { font-family: 'Noto Sans JP', 'Inter', sans-serif; letter-spacing: -0.01em; }
+  .num { font-feature-settings: 'tnum' 1; font-variant-numeric: tabular-nums; }
+
+  /* iPhone frame */
+  .phone {
+    width: 304px;
+    height: 640px;
+    background: #111;
+    border-radius: 44px;
+    padding: 12px;
+    box-shadow: 0 20px 48px rgba(27,32,23,0.14), 0 2px 6px rgba(27,32,23,0.06);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .phone-inner {
+    width: 100%;
+    height: 100%;
+    background: #F7F6F1;
+    border-radius: 32px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  .phone-island {
+    position: absolute;
+    top: 18px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 26px;
+    background: #111;
+    border-radius: 14px;
+    z-index: 20;
+  }
+  .status-bar {
+    height: 44px;
+    padding: 0 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1B2017;
+    flex-shrink: 0;
+    padding-top: 6px;
+  }
+  .app-header {
+    background: #2F6B3D;
+    color: #fff;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .app-header h4 { font-size: 15px; font-weight: 600; }
+  .app-body {
+    flex: 1;
+    overflow: hidden;
+    padding: 12px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .tab-bar {
+    height: 52px;
+    border-top: 1px solid #E4E2D5;
+    background: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    flex-shrink: 0;
+    padding-bottom: 4px;
+    color: #7A8279;
+    font-size: 10px;
+  }
+  .tab-bar .tab.active { color: #2F6B3D; }
+
+  .pin {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    transform: translate(-50%,-50%);
+  }
+  .pin-a-ok { background: #2F6B3D; }
+  .pin-b-ok { background: #5A8E66; }
+  .pin-c    { background: #9CA79D; }
+  .pin-alert { background: #C23B22; animation: pulse 2.2s infinite; }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(194,59,34,0.55), 0 2px 6px rgba(0,0,0,0.3); }
+    50% { box-shadow: 0 0 0 10px rgba(194,59,34,0), 0 2px 6px rgba(0,0,0,0.3); }
+  }
+
+  /* grid lines for map illustration */
+  .map-bg {
+    background-color: #E8EAD9;
+    background-image:
+      linear-gradient(rgba(47,107,61,0.08) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(47,107,61,0.08) 1px, transparent 1px),
+      radial-gradient(circle at 30% 60%, rgba(93,141,255,0.14) 0 6%, transparent 7%),
+      radial-gradient(circle at 75% 30%, rgba(93,141,255,0.10) 0 4%, transparent 5%);
+    background-size: 28px 28px, 28px 28px, 100% 100%, 100% 100%;
+  }
+  .road-h, .road-v {
+    position: absolute;
+    background: #D9D7CB;
+  }
+  .road-h { height: 3px; width: 100%; }
+  .road-v { width: 3px; height: 100%; }
+
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    border-radius: 9999px;
+    font-size: 11px;
+    font-weight: 500;
+    background: #EEF5F0;
+    color: #2F6B3D;
+    border: 1px solid #D7E4DA;
+  }
+  .chip.active { background: #2F6B3D; color: #fff; border-color: #2F6B3D; }
+  .chip.warn { background: #FDF3E0; color: #B6831B; border-color: #F2DFB4; }
+  .chip.danger { background: #FBE5E0; color: #932B17; border-color: #F2C4BA; }
+  .chip.gray { background: #EDEDE6; color: #4B544A; border-color: #D9D7CB; }
+
+  .pill-rank {
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+    padding: 2px 8px;
+    border-radius: 9999px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.02em;
+  }
+  .rank-a { background: #2F6B3D; color: #fff; }
+  .rank-b { background: #5A8E66; color: #fff; }
+  .rank-c { background: #9CA79D; color: #fff; }
+
+  .bar-progress {
+    height: 6px;
+    background: #E4E2D5;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+  .bar-progress > span {
+    display: block;
+    height: 100%;
+    background: #2F6B3D;
+    border-radius: 9999px;
+  }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 9999px;
+    background: #EEF5F0;
+    color: #2F6B3D;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+  }
+  .section-label::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: #2F6B3D;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #E4E2D5;
+    border-radius: 20px;
+    box-shadow: 0 1px 2px rgba(27,32,23,0.04);
+  }
+  .card-sm {
+    background: #fff;
+    border: 1px solid #E4E2D5;
+    border-radius: 14px;
+  }
+
+  .callout {
+    border-left: 3px solid #2F6B3D;
+    background: #fff;
+    border-radius: 0 12px 12px 0;
+  }
+
+  /* badges on hero */
+  .badge-challenge {
+    background: #FFFFFF;
+    border: 1px solid #E4E2D5;
+    color: #1B2017;
+  }
+  .badge-solution {
+    background: #2F6B3D;
+    color: #FFFFFF;
+    border: 1px solid #2F6B3D;
+  }
+
+  /* phone screen backgrounds */
+  .phone-screen { background: #F7F6F1; }
+
+  /* print */
+  @media print {
+    body { background: #fff; }
+    .no-print { display: none !important; }
+    .phone { box-shadow: none; page-break-inside: avoid; }
+    section { page-break-inside: avoid; }
+    .page-break { page-break-before: always; }
+  }
+
+  /* tiny lucide-like SVG helper */
+  .ico { width: 16px; height: 16px; stroke: currentColor; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round; }
+  .ico-lg { width: 20px; height: 20px; }
+  .ico-xl { width: 28px; height: 28px; }
+</style>
+</head>
+<body class="min-h-screen">
+
+<!-- ============================================================ -->
+<!-- 1. HERO                                                      -->
+<!-- ============================================================ -->
+<header class="border-b border-line bg-paper">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 pt-10 pb-4 flex items-center justify-between text-xs text-ink-muted">
+    <div class="flex items-center gap-2">
+      <div class="w-6 h-6 rounded-md bg-primary text-white flex items-center justify-center font-bold text-[11px]">SP</div>
+      <span>舞台ファーム / 営業DXプロジェクト</span>
+    </div>
+    <div class="flex items-center gap-4">
+      <span>企画書 v1.0</span>
+      <span>2026-04-24</span>
+    </div>
+  </div>
+
+  <div class="max-w-6xl mx-auto px-6 md:px-10 pt-4 pb-16 md:pb-20">
+    <span class="section-label mb-6">PRODUCT PROPOSAL</span>
+    <h1 class="mt-4 text-3xl md:text-5xl leading-tight font-bold text-ink">
+      営業訪問プランナー<span class="text-ink-soft text-xl md:text-2xl font-medium block md:inline md:ml-3">（仮称 SalesRoutePlanner）</span>
+    </h1>
+    <p class="mt-5 text-lg md:text-xl text-ink font-medium leading-relaxed">
+      営業現場の「移動・記録・履歴」を<br class="md:hidden"/>ポケット1つに。
+    </p>
+    <p class="mt-3 text-sm md:text-base text-ink-muted max-w-2xl leading-relaxed">
+      AppSheet（Google のノーコード）で<strong class="text-primary">最小1週間で配布可能</strong>。舞台ファームの営業5名が屋外・片手で使い切れる最小機能から始めます。
+    </p>
+
+    <!-- challenge → solution -->
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- card 1 -->
+      <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        <div class="badge-challenge rounded-2xl p-4 text-sm leading-snug min-h-[96px] flex flex-col justify-center">
+          <div class="text-[10px] text-ink-soft font-semibold tracking-widest mb-1">CHALLENGE</div>
+          訪問後のメモが<br/>溜まって書けない
+        </div>
+        <svg class="ico ico-lg text-ink-soft" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        <div class="badge-solution rounded-2xl p-4 text-sm leading-snug min-h-[96px] flex flex-col justify-center">
+          <div class="text-[10px] text-white/80 font-semibold tracking-widest mb-1">SOLUTION</div>
+          <strong class="text-white">3秒の音声メモ</strong>
+        </div>
+      </div>
+      <!-- card 2 -->
+      <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        <div class="badge-challenge rounded-2xl p-4 text-sm leading-snug min-h-[96px] flex flex-col justify-center">
+          <div class="text-[10px] text-ink-soft font-semibold tracking-widest mb-1">CHALLENGE</div>
+          どこから回れば<br/>最短か考えるのが負担
+        </div>
+        <svg class="ico ico-lg text-ink-soft" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        <div class="badge-solution rounded-2xl p-4 text-sm leading-snug min-h-[96px] flex flex-col justify-center">
+          <div class="text-[10px] text-white/80 font-semibold tracking-widest mb-1">SOLUTION</div>
+          <strong class="text-white">地図から順序最適化</strong>
+        </div>
+      </div>
+      <!-- card 3 -->
+      <div class="grid grid-cols-[1fr_auto_1fr] items-center gap-3">
+        <div class="badge-challenge rounded-2xl p-4 text-sm leading-snug min-h-[96px] flex flex-col justify-center">
+          <div class="text-[10px] text-ink-soft font-semibold tracking-widest mb-1">CHALLENGE</div>
+          過去の商談が<br/>頭から消える
+        </div>
+        <svg class="ico ico-lg text-ink-soft" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        <div class="badge-solution rounded-2xl p-4 text-sm leading-snug min-h-[96px] flex flex-col justify-center">
+          <div class="text-[10px] text-white/80 font-semibold tracking-widest mb-1">SOLUTION</div>
+          <strong class="text-white">取引先タップで履歴</strong>
+        </div>
+      </div>
+    </div>
+
+    <!-- tagline pill -->
+    <div class="mt-8 inline-flex items-center gap-3 rounded-full bg-white border border-line px-4 py-2 text-xs md:text-sm text-ink-muted">
+      <svg class="ico text-accent-dark" viewBox="0 0 24 24"><path d="M12 2l2.4 6.9H22l-6.2 4.5 2.4 7.2L12 16.8l-6.2 3.8 2.4-7.2L2 8.9h7.6z"/></svg>
+      <span><strong class="text-ink">AppSheet（Google のノーコード）</strong>で最小1週間で配布</span>
+      <span class="text-line">|</span>
+      <span>Phase 1 は 10 取引先で実証</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============================================================ -->
+<!-- 2. Users & Scenes                                            -->
+<!-- ============================================================ -->
+<section class="border-b border-line">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
+    <span class="section-label">想定ユーザーと利用シーン</span>
+    <h2 class="mt-4 text-2xl md:text-3xl font-bold text-ink">仙台エリア担当 営業5名 / iPhone・iPad 屋外使用</h2>
+    <p class="mt-3 text-sm md:text-base text-ink-muted max-w-3xl leading-relaxed">
+      飲食店・給食・宿泊・小売など幅広い取引先を、一人あたり週20〜40件規模で担当。車内・路上・店内での片手操作と日光下の可読性が最重要。
+    </p>
+
+    <!-- user cards -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="card p-5">
+        <div class="text-xs text-ink-soft font-semibold tracking-widest">PRIMARY USER</div>
+        <div class="mt-2 text-lg font-bold text-ink">営業担当（5名）</div>
+        <div class="mt-3 text-sm text-ink-muted leading-relaxed">
+          山田・鈴木ら現場営業。運転の合間・店舗訪問直後に片手で使う前提。文字入力する余裕はない。
+        </div>
+      </div>
+      <div class="card p-5">
+        <div class="text-xs text-ink-soft font-semibold tracking-widest">MANAGER</div>
+        <div class="mt-2 text-lg font-bold text-ink">営業マネージャー</div>
+        <div class="mt-3 text-sm text-ink-muted leading-relaxed">
+          訪問状況を俯瞰。停滞 Account の早期発見と次アクション追跡を Web 画面で。
+        </div>
+      </div>
+      <div class="card p-5">
+        <div class="text-xs text-ink-soft font-semibold tracking-widest">ADMIN</div>
+        <div class="mt-2 text-lg font-bold text-ink">情シス / 営業事務</div>
+        <div class="mt-3 text-sm text-ink-muted leading-relaxed">
+          AppSheet Editor で View・式を微調整できる。非エンジニアでも改修可能な構造が運用負担を下げる。
+        </div>
+      </div>
+    </div>
+
+    <!-- day timeline -->
+    <h3 class="mt-12 text-lg md:text-xl font-bold text-ink">営業1日の流れ</h3>
+    <div class="mt-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="card p-5 relative">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">1</div>
+          <div class="text-xs text-ink-soft font-semibold">朝 08:30</div>
+        </div>
+        <div class="text-base font-bold text-ink">今日の候補確認</div>
+        <div class="mt-2 text-xs text-ink-muted leading-relaxed">Home で 今日の訪問 / 停滞 Account / 未記録 をチェック。地図で候補の位置関係を把握。</div>
+      </div>
+      <div class="card p-5 relative">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">2</div>
+          <div class="text-xs text-ink-soft font-semibold">午前 10:00〜</div>
+        </div>
+        <div class="text-base font-bold text-ink">訪問・記録</div>
+        <div class="mt-2 text-xs text-ink-muted leading-relaxed">現地で「✓ 訪問を開始」→ 音声メモ → 「✓ 訪問を終了」。所要時間は自動記録。</div>
+      </div>
+      <div class="card p-5 relative">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-full bg-primary text-white flex items-center justify-center text-xs font-bold">3</div>
+          <div class="text-xs text-ink-soft font-semibold">午後 13:30〜</div>
+        </div>
+        <div class="text-base font-bold text-ink">次のルート</div>
+        <div class="mt-2 text-xs text-ink-muted leading-relaxed">Today's Route で残件を確認、ナビボタン1タップで Google Maps が起動。</div>
+      </div>
+      <div class="card p-5 relative">
+        <div class="flex items-center gap-2 mb-2">
+          <div class="w-7 h-7 rounded-full bg-accent text-white flex items-center justify-center text-xs font-bold">4</div>
+          <div class="text-xs text-ink-soft font-semibold">夕方 17:00</div>
+        </div>
+        <div class="text-base font-bold text-ink">振り返り</div>
+        <div class="mt-2 text-xs text-ink-muted leading-relaxed">訪問履歴と次アクション期限を確認。手直しはこのタイミングだけでOK。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 3. Screen Mocks                                              -->
+<!-- ============================================================ -->
+<section class="border-b border-line bg-white/60">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
+    <span class="section-label">SCREEN MOCKS (6)</span>
+    <h2 class="mt-4 text-2xl md:text-3xl font-bold text-ink">画面モック集（デモ Phase 1 の全6画面）</h2>
+    <p class="mt-3 text-sm md:text-base text-ink-muted max-w-3xl leading-relaxed">
+      実データ（仙台エリアの取引先10件）で構成した iPhone モック。<strong>屋外片手・3秒記録</strong>を成立させるための配置になっています。
+    </p>
+
+    <!-- 3-1 Home -->
+    <div class="mt-12 grid grid-cols-1 md:grid-cols-[auto_1fr] gap-10 items-start">
+      <div class="flex justify-center">
+        <div class="phone">
+          <div class="phone-island"></div>
+          <div class="phone-inner">
+            <div class="status-bar">
+              <span class="num">9:41</span>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-3" viewBox="0 0 16 12"><path d="M1 10 L3 8 M5 10 L9 4 M11 10 L15 2" stroke="#1B2017" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                <svg class="w-4 h-3" viewBox="0 0 16 12"><path d="M2 6 Q8 0 14 6 M4 8 Q8 4 12 8 M6 10 Q8 8 10 10" stroke="#1B2017" stroke-width="1.2" fill="none"/></svg>
+                <div class="w-6 h-3 rounded-[2px] border border-ink flex items-center pl-0.5">
+                  <div class="w-4 h-1.5 bg-ink rounded-[1px]"></div>
+                </div>
+              </div>
+            </div>
+            <div class="app-header">
+              <h4>営業訪問プランナー</h4>
+              <svg class="ico text-white" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+            </div>
+            <div class="app-body phone-screen">
+              <!-- greeting -->
+              <div>
+                <div class="text-[11px] text-ink-soft">2026-04-24 (金)</div>
+                <div class="text-base font-bold text-ink">おはようございます、山田さん</div>
+              </div>
+              <!-- today progress card -->
+              <div class="card p-3">
+                <div class="flex items-center justify-between">
+                  <div class="text-[11px] text-ink-muted">今日の訪問</div>
+                  <div class="text-[11px] num text-primary font-semibold">40%</div>
+                </div>
+                <div class="mt-1 flex items-baseline gap-1">
+                  <span class="text-2xl font-bold num text-ink">2</span>
+                  <span class="text-sm text-ink-soft">/ 5 件</span>
+                </div>
+                <div class="mt-2 bar-progress"><span style="width:40%"></span></div>
+              </div>
+              <!-- alert row -->
+              <div class="grid grid-cols-2 gap-2">
+                <div class="card p-3">
+                  <div class="text-[10px] text-ink-soft">未記録</div>
+                  <div class="flex items-center gap-1 mt-1">
+                    <div class="w-2 h-2 rounded-full bg-primary"></div>
+                    <span class="num font-bold text-ink text-base">0</span>
+                    <span class="text-[11px] text-ink-muted">件</span>
+                  </div>
+                </div>
+                <div class="card p-3">
+                  <div class="text-[10px] text-ink-soft">60日未訪問</div>
+                  <div class="flex items-center gap-1 mt-1">
+                    <div class="w-2 h-2 rounded-full bg-danger"></div>
+                    <span class="num font-bold text-danger text-base">1</span>
+                    <span class="text-[11px] text-ink-muted">社</span>
+                  </div>
+                </div>
+              </div>
+              <!-- large CTAs -->
+              <button class="mt-auto w-full h-12 rounded-2xl bg-primary text-white font-bold text-sm flex items-center justify-center gap-2">
+                <svg class="ico text-white" viewBox="0 0 24 24"><path d="M12 22s-7-8-7-13a7 7 0 1 1 14 0c0 5-7 13-7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
+                地図で取引先を見る
+              </button>
+              <button class="w-full h-11 rounded-2xl border border-primary text-primary font-semibold text-sm flex items-center justify-center gap-2">
+                <svg class="ico text-primary" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                今日のルート
+              </button>
+            </div>
+            <div class="tab-bar">
+              <div class="tab active flex flex-col items-center gap-0.5">
+                <svg class="ico text-primary" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v11H3z"/></svg>
+                <span>Home</span>
+              </div>
+              <div class="tab flex flex-col items-center gap-0.5">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M12 22s-7-8-7-13a7 7 0 1 1 14 0c0 5-7 13-7 13z"/></svg>
+                <span>地図</span>
+              </div>
+              <div class="tab flex flex-col items-center gap-0.5">
+                <svg class="ico" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+                <span>ルート</span>
+              </div>
+              <div class="tab flex flex-col items-center gap-0.5">
+                <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+                <span>自分</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pt-4">
+        <div class="text-xs text-accent-dark font-bold tracking-widest">3-1 · HOME</div>
+        <h3 class="mt-2 text-xl md:text-2xl font-bold text-ink">ダッシュボード</h3>
+        <p class="mt-3 text-sm text-ink-muted leading-relaxed">
+          朝8時に開いた瞬間、<strong>今日どれだけ回るか・未記録があるか・停滞している取引先があるか</strong>を3バッジで把握。大型CTAで迷わず地図 or ルートへ。
+        </p>
+        <ul class="mt-4 space-y-2 text-sm text-ink">
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>「今日の訪問 2/5件」の進捗バーで体感</li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>60日未訪問の<strong>赤バッジ</strong>で停滞Accountに気付く</li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>主操作は画面下半分、親指が届くエリアに集約</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3-2 Map -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 items-start">
+      <div class="pt-4 md:order-1 order-2">
+        <div class="text-xs text-accent-dark font-bold tracking-widest">3-2 · ACCOUNT MAP</div>
+        <h3 class="mt-2 text-xl md:text-2xl font-bold text-ink">取引先マップ</h3>
+        <p class="mt-3 text-sm text-ink-muted leading-relaxed">
+          仙台市内10取引先を<strong>ランク × 最終訪問日の2軸</strong>でピン色分け。焼肉 大吉（Aランク・162日未訪問）だけが赤く主張し、<strong>"まず行くべき"が一目で分かる</strong>。
+        </p>
+        <ul class="mt-4 space-y-2 text-sm text-ink">
+          <li class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-primary"></span> Aランク・管理良好（濃緑）</li>
+          <li class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-primary-light"></span> Bランク・管理良好（緑）</li>
+          <li class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-[#9CA79D]"></span> Cランク（グレー）</li>
+          <li class="flex items-center gap-2"><span class="w-3 h-3 rounded-full bg-danger"></span> <strong>Aランク・60日以上停滞（赤）</strong></li>
+        </ul>
+      </div>
+      <div class="flex justify-center md:order-2 order-1">
+        <div class="phone">
+          <div class="phone-island"></div>
+          <div class="phone-inner">
+            <div class="status-bar">
+              <span class="num">9:41</span>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-3" viewBox="0 0 16 12"><path d="M1 10 L3 8 M5 10 L9 4 M11 10 L15 2" stroke="#1B2017" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                <div class="w-6 h-3 rounded-[2px] border border-ink flex items-center pl-0.5"><div class="w-4 h-1.5 bg-ink rounded-[1px]"></div></div>
+              </div>
+            </div>
+            <div class="app-header">
+              <h4>取引先マップ</h4>
+              <svg class="ico text-white" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+            </div>
+            <div class="relative flex-1 map-bg overflow-hidden">
+              <!-- roads -->
+              <div class="road-h" style="top:34%"></div>
+              <div class="road-h" style="top:62%"></div>
+              <div class="road-v" style="left:38%"></div>
+              <div class="road-v" style="left:68%"></div>
+              <!-- pins (relative to map area) -->
+              <!-- acc-001 居酒屋 とまり木 -->
+              <div class="pin pin-a-ok" style="top:44%; left:42%"></div>
+              <!-- acc-002 和食 瑞鳳 -->
+              <div class="pin pin-a-ok" style="top:50%; left:46%"></div>
+              <!-- acc-003 ビストロ ソレイユ -->
+              <div class="pin pin-b-ok" style="top:31%; left:40%"></div>
+              <!-- acc-004 給食センター -->
+              <div class="pin pin-a-ok" style="top:22%; left:72%"></div>
+              <!-- acc-005 ホテル松島 (右上遠方) -->
+              <div class="pin pin-a-ok" style="top:10%; left:88%"></div>
+              <!-- acc-006 フレッシュ泉 -->
+              <div class="pin pin-b-ok" style="top:16%; left:50%"></div>
+              <!-- acc-007 道の駅 村田 (下遠方) -->
+              <div class="pin pin-c" style="top:88%; left:22%"></div>
+              <!-- acc-008 パン工房 麦の香 -->
+              <div class="pin pin-b-ok" style="top:74%; left:52%"></div>
+              <!-- acc-009 旅館 ゆのはま 秋保 -->
+              <div class="pin pin-a-ok" style="top:66%; left:14%"></div>
+              <!-- acc-010 焼肉 大吉 (赤 alert) -->
+              <div class="pin pin-alert" style="top:58%; left:62%"></div>
+
+              <!-- selected callout - とまり木 -->
+              <div class="absolute bg-white rounded-xl shadow-card border border-line p-2 pr-3" style="top:50%; left:48%; width: 150px;">
+                <div class="flex items-center gap-1.5">
+                  <span class="pill-rank rank-a">A</span>
+                  <span class="text-[11px] font-bold text-ink">居酒屋 とまり木</span>
+                </div>
+                <div class="mt-0.5 text-[9px] text-ink-muted">青葉区国分町 / 最終 04/10</div>
+                <div class="absolute w-2 h-2 bg-white border-l border-b border-line rotate-45" style="bottom:-5px; left:20px;"></div>
+              </div>
+
+              <!-- FAB recenter -->
+              <button class="absolute bottom-3 right-3 w-10 h-10 rounded-full bg-white shadow-card border border-line flex items-center justify-center">
+                <svg class="ico text-primary" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="12" r="9"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/></svg>
+              </button>
+              <!-- legend -->
+              <div class="absolute bottom-3 left-3 bg-white/90 border border-line rounded-lg px-2 py-1.5 text-[9px] space-y-0.5">
+                <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary"></span>Aランク</div>
+                <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-primary-light"></span>Bランク</div>
+                <div class="flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-danger"></span>停滞</div>
+              </div>
+            </div>
+            <div class="tab-bar">
+              <div class="tab flex flex-col items-center gap-0.5"><svg class="ico" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v11H3z"/></svg><span>Home</span></div>
+              <div class="tab active flex flex-col items-center gap-0.5"><svg class="ico text-primary" viewBox="0 0 24 24"><path d="M12 22s-7-8-7-13a7 7 0 1 1 14 0c0 5-7 13-7 13z"/></svg><span>地図</span></div>
+              <div class="tab flex flex-col items-center gap-0.5"><svg class="ico" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg><span>ルート</span></div>
+              <div class="tab flex flex-col items-center gap-0.5"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg><span>自分</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3-3 Account Detail -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-[auto_1fr] gap-10 items-start">
+      <div class="flex justify-center">
+        <div class="phone">
+          <div class="phone-island"></div>
+          <div class="phone-inner">
+            <div class="status-bar">
+              <span class="num">9:41</span>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-3" viewBox="0 0 16 12"><path d="M1 10 L3 8 M5 10 L9 4 M11 10 L15 2" stroke="#1B2017" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                <div class="w-6 h-3 rounded-[2px] border border-ink flex items-center pl-0.5"><div class="w-4 h-1.5 bg-ink rounded-[1px]"></div></div>
+              </div>
+            </div>
+            <div class="app-header">
+              <div class="flex items-center gap-2">
+                <svg class="ico text-white" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                <h4>取引先詳細</h4>
+              </div>
+              <svg class="ico text-white" viewBox="0 0 24 24"><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/><circle cx="5" cy="12" r="1"/></svg>
+            </div>
+            <div class="app-body phone-screen overflow-y-auto">
+              <!-- header -->
+              <div>
+                <div class="text-lg font-bold text-ink leading-tight">焼肉 大吉</div>
+                <div class="mt-1.5 flex items-center gap-2 flex-wrap">
+                  <span class="pill-rank rank-a">A ランク</span>
+                  <span class="chip danger"><span class="w-1.5 h-1.5 rounded-full bg-danger"></span>最終訪問: <strong class="num">162</strong>日前 (山田)</span>
+                </div>
+              </div>
+
+              <!-- action row -->
+              <div class="grid grid-cols-3 gap-1.5">
+                <button class="col-span-3 h-11 rounded-xl bg-primary text-white font-bold text-sm flex items-center justify-center gap-1.5">
+                  <svg class="ico text-white" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polygon points="10,8 16,12 10,16" fill="currentColor"/></svg>
+                  訪問を開始
+                </button>
+                <button class="h-10 rounded-xl border border-primary text-primary font-semibold text-[11px] flex items-center justify-center gap-1">
+                  <svg class="ico text-primary" viewBox="0 0 24 24"><path d="M12 22s-7-8-7-13a7 7 0 1 1 14 0c0 5-7 13-7 13z"/></svg>
+                  ナビ
+                </button>
+                <button class="h-10 rounded-xl border border-primary text-primary font-semibold text-[11px] flex items-center justify-center gap-1">
+                  <svg class="ico text-primary" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 20 20 0 0 1-8.6-3.1 20 20 0 0 1-6-6A20 20 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2L8 9.6a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>
+                  電話
+                </button>
+                <button class="h-10 rounded-xl border border-line text-ink-muted font-semibold text-[11px] flex items-center justify-center gap-1">
+                  <svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 2"/></svg>
+                  履歴
+                </button>
+              </div>
+
+              <!-- opportunity / contact info -->
+              <div class="callout p-3 text-xs">
+                <div class="text-ink-soft text-[10px] font-semibold tracking-wider">進行中の商談</div>
+                <div class="text-ink mt-0.5">なし（半年以上動きなし）</div>
+              </div>
+
+              <div class="text-[11px] text-ink-muted space-y-1">
+                <div class="flex items-start gap-1.5">
+                  <svg class="ico text-ink-soft flex-shrink-0" viewBox="0 0 24 24"><path d="M12 22s-7-8-7-13a7 7 0 1 1 14 0c0 5-7 13-7 13z"/></svg>
+                  仙台市若林区荒町45
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <svg class="ico text-ink-soft" viewBox="0 0 24 24"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 20 20 0 0 1-8.6-3.1 20 20 0 0 1-6-6A20 20 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.6a2 2 0 0 1-.5 2L8 9.6a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2-.5c.8.3 1.7.5 2.6.6a2 2 0 0 1 1.7 2z"/></svg>
+                  <span class="text-primary font-semibold num">022-224-1010</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <svg class="ico text-ink-soft" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg>
+                  店長 小野寺（担当）
+                </div>
+              </div>
+
+              <!-- history -->
+              <div>
+                <div class="text-[10px] text-ink-soft font-semibold tracking-wider mb-1.5">訪問履歴 (3件)</div>
+                <div class="card-sm p-2.5 mb-1.5">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-ink num">2025-11-14</span>
+                    <span class="chip gray text-[9px] py-0">関係維持</span>
+                  </div>
+                  <div class="text-[10px] text-ink-muted mt-0.5 truncate">秋の新米提案、反応は…</div>
+                </div>
+                <div class="card-sm p-2.5 mb-1.5">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-ink num">2025-09-02</span>
+                    <span class="chip gray text-[9px] py-0">フォロー</span>
+                  </div>
+                  <div class="text-[10px] text-ink-muted mt-0.5 truncate">ハネ米のテスト結果を…</div>
+                </div>
+                <div class="card-sm p-2.5">
+                  <div class="flex items-center justify-between text-[11px]">
+                    <span class="font-bold text-ink num">2025-07-10</span>
+                    <span class="chip gray text-[9px] py-0">契約</span>
+                  </div>
+                  <div class="text-[10px] text-ink-muted mt-0.5 truncate">年間20俵で更新合意…</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pt-4">
+        <div class="text-xs text-accent-dark font-bold tracking-widest">3-3 · ACCOUNT DETAIL</div>
+        <h3 class="mt-2 text-xl md:text-2xl font-bold text-ink">取引先詳細（焼肉 大吉）</h3>
+        <p class="mt-3 text-sm text-ink-muted leading-relaxed">
+          停滞Accountの赤ピンをタップして開く画面。<strong>0.5秒で欲しい情報</strong>を上から優先順で配置：会社名 → ランク → 最終訪問経過日 → 進行中商談 → 主要アクション。
+        </p>
+        <ul class="mt-4 space-y-2 text-sm text-ink">
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span>「最終訪問: 162日前」を<strong class="text-danger">赤</strong>で強調し、危機感を色で伝達</span></li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span><strong>訪問を開始</strong> を画面上部1/3 以内に配置、迷わずタップ</span></li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span>訪問履歴はDeckで時系列、4件目以降は別画面へ退避</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3-4 Visit Record Quick (★ Most Important) -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 items-start">
+      <div class="pt-4 md:order-1 order-2">
+        <div class="flex items-center gap-2">
+          <div class="text-xs text-accent-dark font-bold tracking-widest">3-4 · VISIT RECORD QUICK</div>
+          <span class="chip warn text-[10px]">★最重要</span>
+        </div>
+        <h3 class="mt-2 text-xl md:text-2xl font-bold text-ink">訪問メモ（音声クイック入力）</h3>
+        <p class="mt-3 text-sm text-ink-muted leading-relaxed">
+          本プロダクトの<strong>体験の核</strong>。現場の営業が<strong>3秒で訪問を記録できる</strong>ことが「使い続けられるか」の分水嶺。録音ボタンは画面最上部・幅100%・80px高。
+        </p>
+        <ul class="mt-4 space-y-2 text-sm text-ink">
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span><strong>3秒体験</strong>: 録音だけして閉じてもOK（他は任意）</span></li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span><strong>10秒体験</strong>: 録音 + 会った人1タップ + 用件1タップ</span></li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span><strong>30秒体験</strong>: 上記 + 次アクション1行</span></li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span>画面下部固定の「✓ 訪問を終了」で1タップ完了</span></li>
+        </ul>
+      </div>
+      <div class="flex justify-center md:order-2 order-1">
+        <div class="phone">
+          <div class="phone-island"></div>
+          <div class="phone-inner">
+            <div class="status-bar">
+              <span class="num">9:41</span>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-3" viewBox="0 0 16 12"><path d="M1 10 L3 8 M5 10 L9 4 M11 10 L15 2" stroke="#1B2017" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                <div class="w-6 h-3 rounded-[2px] border border-ink flex items-center pl-0.5"><div class="w-4 h-1.5 bg-ink rounded-[1px]"></div></div>
+              </div>
+            </div>
+            <div class="app-header">
+              <div class="flex items-center gap-2">
+                <svg class="ico text-white" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                <h4>訪問メモ</h4>
+              </div>
+              <button class="text-[11px] text-white/80">保存</button>
+            </div>
+            <div class="app-body phone-screen overflow-y-auto">
+              <!-- title -->
+              <div>
+                <div class="text-[13px] font-bold text-ink leading-tight">焼肉 大吉 / 小野寺店長</div>
+                <div class="text-[10px] text-ink-muted mt-0.5">訪問開始 <span class="num">10:08</span></div>
+              </div>
+
+              <!-- BIG RECORD BUTTON -->
+              <button class="w-full rounded-2xl bg-primary text-white font-bold flex items-center justify-center gap-3 shadow-card" style="height: 72px;">
+                <div class="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center relative">
+                  <svg class="ico ico-lg text-white" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10a1 1 0 0 0-1 1v1a6 6 0 0 1-12 0v-1a1 1 0 0 0-2 0v1a8 8 0 0 0 7 7.93V23h2v-3.07A8 8 0 0 0 20 12v-1a1 1 0 0 0-1-1z"/></svg>
+                </div>
+                <div class="text-left">
+                  <div class="text-base leading-tight">録音を開始</div>
+                  <div class="text-[10px] font-normal text-white/80">タップして話すだけ</div>
+                </div>
+              </button>
+
+              <!-- memo field -->
+              <div>
+                <div class="text-[10px] text-ink-soft font-semibold">メモ (任意)</div>
+                <div class="mt-1 border border-line rounded-lg p-2 bg-white text-[10px] text-ink-soft min-h-[44px]">
+                  音声が使えない場合はここに打ち込んでOK
+                </div>
+              </div>
+
+              <!-- contacts chips -->
+              <div>
+                <div class="text-[10px] text-ink-soft font-semibold">会った人</div>
+                <div class="mt-1 flex flex-wrap gap-1">
+                  <span class="chip active text-[10px] py-0.5">小野寺店長</span>
+                  <span class="chip text-[10px] py-0.5">田島料理長</span>
+                  <span class="chip gray text-[10px] py-0.5">+ 追加</span>
+                </div>
+              </div>
+
+              <!-- purpose -->
+              <div>
+                <div class="text-[10px] text-ink-soft font-semibold">用件</div>
+                <div class="mt-1 grid grid-cols-3 gap-1">
+                  <span class="chip text-[9px] justify-center">新規提案</span>
+                  <span class="chip active text-[9px] justify-center">フォロー</span>
+                  <span class="chip text-[9px] justify-center">クレーム</span>
+                  <span class="chip text-[9px] justify-center">関係維持</span>
+                  <span class="chip text-[9px] justify-center">契約</span>
+                  <span class="chip text-[9px] justify-center">納品</span>
+                </div>
+              </div>
+
+              <!-- END visit button (sticky bottom) -->
+              <button class="mt-auto w-full h-12 rounded-2xl bg-primary text-white font-bold text-sm flex items-center justify-center gap-2 shadow-card">
+                <svg class="ico text-white" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg>
+                訪問を終了する
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3-5 Today's Route -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-[auto_1fr] gap-10 items-start">
+      <div class="flex justify-center">
+        <div class="phone">
+          <div class="phone-island"></div>
+          <div class="phone-inner">
+            <div class="status-bar">
+              <span class="num">9:41</span>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-3" viewBox="0 0 16 12"><path d="M1 10 L3 8 M5 10 L9 4 M11 10 L15 2" stroke="#1B2017" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                <div class="w-6 h-3 rounded-[2px] border border-ink flex items-center pl-0.5"><div class="w-4 h-1.5 bg-ink rounded-[1px]"></div></div>
+              </div>
+            </div>
+            <div class="app-header">
+              <h4>今日のルート</h4>
+              <div class="text-[11px] font-semibold">3件 · 2件残</div>
+            </div>
+            <div class="app-body phone-screen overflow-y-auto">
+              <!-- date -->
+              <div class="text-[11px] text-ink-muted"><span class="num">2026-04-24</span> (金) · 山田 太郎</div>
+
+              <!-- card 1: PLANNED -->
+              <div class="card p-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-primary-50 text-primary font-bold text-xs flex items-center justify-center num">①</div>
+                  <div class="text-sm font-bold text-ink num">10:00</div>
+                  <span class="chip text-[10px] py-0.5">●予定</span>
+                </div>
+                <div class="mt-1 ml-9">
+                  <div class="font-bold text-ink text-sm">ビストロ ソレイユ</div>
+                  <div class="text-[10px] text-ink-muted">青葉区木町通 · 新規提案 / 高橋オーナーシェフ</div>
+                </div>
+                <div class="mt-2 flex gap-1.5 ml-9">
+                  <button class="h-7 px-2 rounded-md border border-primary text-primary text-[10px] font-semibold flex items-center gap-1">
+                    <svg class="ico text-primary" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M12 22s-7-8-7-13a7 7 0 1 1 14 0c0 5-7 13-7 13z"/></svg>
+                    ナビ
+                  </button>
+                </div>
+              </div>
+
+              <!-- card 2: PLANNED -->
+              <div class="card p-3">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-primary-50 text-primary font-bold text-xs flex items-center justify-center num">②</div>
+                  <div class="text-sm font-bold text-ink num">13:30</div>
+                  <span class="chip text-[10px] py-0.5">●予定</span>
+                </div>
+                <div class="mt-1 ml-9">
+                  <div class="font-bold text-ink text-sm">ホテル松島ビュー</div>
+                  <div class="text-[10px] text-ink-muted">松島町 · フォロー / 阿部支配人</div>
+                </div>
+                <div class="mt-2 flex gap-1.5 ml-9">
+                  <button class="h-7 px-2 rounded-md border border-primary text-primary text-[10px] font-semibold flex items-center gap-1">
+                    <svg class="ico text-primary" viewBox="0 0 24 24" style="width:12px;height:12px"><path d="M12 22s-7-8-7-13a7 7 0 1 1 14 0c0 5-7 13-7 13z"/></svg>
+                    ナビ
+                  </button>
+                </div>
+              </div>
+
+              <!-- card 3: COMPLETED -->
+              <div class="card p-3 bg-paper">
+                <div class="flex items-center gap-2">
+                  <div class="w-7 h-7 rounded-full bg-primary text-white font-bold text-xs flex items-center justify-center num">③</div>
+                  <div class="text-sm font-bold text-ink num">15:00</div>
+                  <span class="chip active text-[10px] py-0.5">●訪問済</span>
+                </div>
+                <div class="mt-1 ml-9">
+                  <div class="font-bold text-ink-muted text-sm line-through decoration-primary/30">パン工房 麦の香</div>
+                  <div class="text-[10px] text-ink-soft">太白区長町 · フォロー · <span class="num">36分滞在</span></div>
+                </div>
+              </div>
+
+              <!-- summary -->
+              <div class="mt-auto card-sm p-2 text-center text-[10px] text-ink-muted">
+                本日の移動距離 <span class="num text-ink font-bold">85km</span> · 所要 <span class="num text-ink font-bold">70分</span>
+              </div>
+            </div>
+            <div class="tab-bar">
+              <div class="tab flex flex-col items-center gap-0.5"><svg class="ico" viewBox="0 0 24 24"><path d="M3 10l9-7 9 7v11H3z"/></svg><span>Home</span></div>
+              <div class="tab flex flex-col items-center gap-0.5"><svg class="ico" viewBox="0 0 24 24"><path d="M12 22s-7-8-7-13a7 7 0 1 1 14 0c0 5-7 13-7 13z"/></svg><span>地図</span></div>
+              <div class="tab active flex flex-col items-center gap-0.5"><svg class="ico text-primary" viewBox="0 0 24 24"><path d="M3 12h18M3 6h18M3 18h18"/></svg><span>ルート</span></div>
+              <div class="tab flex flex-col items-center gap-0.5"><svg class="ico" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-7 8-7s8 3 8 7"/></svg><span>自分</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="pt-4">
+        <div class="text-xs text-accent-dark font-bold tracking-widest">3-5 · TODAY'S ROUTE</div>
+        <h3 class="mt-2 text-xl md:text-2xl font-bold text-ink">今日のルート（Deck）</h3>
+        <p class="mt-3 text-sm text-ink-muted leading-relaxed">
+          今日の訪問予定を時系列カードで一覧。番号・時刻・状態バッジの3点セットで、<strong>運転中にチラ見で進捗が読める</strong>。ナビ起動は1タップで Google Maps へ。
+        </p>
+        <ul class="mt-4 space-y-2 text-sm text-ink">
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span>訪問済は<strong>取消線と滞在時間</strong>、今日の成果も同画面で把握</span></li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span>画面下に移動距離・所要時間サマリ</span></li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span>Phase 2 で順序最適化（現状は scheduled_at 順）</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 3-6 Visit Detail -->
+    <div class="mt-16 grid grid-cols-1 md:grid-cols-[1fr_auto] gap-10 items-start">
+      <div class="pt-4 md:order-1 order-2">
+        <div class="text-xs text-accent-dark font-bold tracking-widest">3-6 · VISIT DETAIL</div>
+        <h3 class="mt-2 text-xl md:text-2xl font-bold text-ink">訪問詳細（和食 瑞鳳 / 04-15）</h3>
+        <p class="mt-3 text-sm text-ink-muted leading-relaxed">
+          完了済み訪問のレコード。<strong>後から振り返る</strong>用途のため、メモ本文を全文表示して滞在時間・用件・次アクションの期限まで一画面で把握可能。
+        </p>
+        <ul class="mt-4 space-y-2 text-sm text-ink">
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span>滞在時間 <strong class="num">50分</strong> を自動計算</span></li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span>抽出された「次アクション / 期限」を別カードで表示</span></li>
+          <li class="flex gap-2"><svg class="ico text-primary mt-0.5" viewBox="0 0 24 24"><path d="M5 12l5 5L20 7"/></svg><span>商談化した note には<strong class="text-accent-dark">Opportunity化済</strong>バッジ</span></li>
+        </ul>
+      </div>
+      <div class="flex justify-center md:order-2 order-1">
+        <div class="phone">
+          <div class="phone-island"></div>
+          <div class="phone-inner">
+            <div class="status-bar">
+              <span class="num">9:41</span>
+              <div class="flex items-center gap-1.5">
+                <svg class="w-4 h-3" viewBox="0 0 16 12"><path d="M1 10 L3 8 M5 10 L9 4 M11 10 L15 2" stroke="#1B2017" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>
+                <div class="w-6 h-3 rounded-[2px] border border-ink flex items-center pl-0.5"><div class="w-4 h-1.5 bg-ink rounded-[1px]"></div></div>
+              </div>
+            </div>
+            <div class="app-header">
+              <div class="flex items-center gap-2">
+                <svg class="ico text-white" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
+                <h4>訪問詳細</h4>
+              </div>
+            </div>
+            <div class="app-body phone-screen overflow-y-auto">
+              <!-- heading -->
+              <div>
+                <div class="text-base font-bold text-ink leading-tight">和食 瑞鳳</div>
+                <div class="text-[11px] text-ink-muted mt-0.5 num">2026-04-15 · 11:00 〜 11:52</div>
+                <div class="mt-1.5 flex items-center gap-1.5">
+                  <span class="chip active text-[10px] py-0.5">●訪問済</span>
+                  <span class="chip text-[10px] py-0.5">新規提案</span>
+                  <span class="chip gray text-[10px] py-0.5 num">50分</span>
+                </div>
+              </div>
+
+              <!-- memo -->
+              <div class="card p-3">
+                <div class="text-[10px] text-ink-soft font-semibold tracking-wider mb-1">訪問メモ</div>
+                <div class="text-[11px] text-ink leading-relaxed">
+                  佐々木料理長にササニシキ特別栽培米を提案。試食は非常に好反応。来月頭からの定期納品に向けて来週500gのサンプル送付することで合意。
+                </div>
+              </div>
+
+              <!-- people / location -->
+              <div class="grid grid-cols-2 gap-2">
+                <div class="card-sm p-2">
+                  <div class="text-[9px] text-ink-soft">会った人</div>
+                  <div class="text-[11px] font-semibold text-ink mt-0.5">佐々木料理長</div>
+                </div>
+                <div class="card-sm p-2">
+                  <div class="text-[9px] text-ink-soft">到着位置精度</div>
+                  <div class="text-[11px] font-semibold text-primary mt-0.5 num">±8m</div>
+                </div>
+              </div>
+
+              <!-- next action -->
+              <div class="callout p-3">
+                <div class="flex items-center justify-between">
+                  <div class="text-[10px] text-ink-soft font-semibold tracking-wider">次のアクション</div>
+                  <span class="chip warn text-[9px] py-0">Opportunity化済</span>
+                </div>
+                <div class="text-[12px] text-ink font-semibold mt-1">サンプル送付</div>
+                <div class="text-[10px] text-ink-muted mt-0.5 num">期限 2026-04-22 (あと 6日)</div>
+              </div>
+
+              <!-- action buttons -->
+              <div class="mt-auto grid grid-cols-2 gap-1.5">
+                <button class="h-10 rounded-xl border border-primary text-primary font-semibold text-[11px]">メモ追記</button>
+                <button class="h-10 rounded-xl bg-primary text-white font-semibold text-[11px]">この取引先へ</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 4. Feature Highlights                                        -->
+<!-- ============================================================ -->
+<section class="border-b border-line">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
+    <span class="section-label">FEATURES</span>
+    <h2 class="mt-4 text-2xl md:text-3xl font-bold text-ink">機能ハイライト</h2>
+    <p class="mt-3 text-sm md:text-base text-ink-muted max-w-3xl leading-relaxed">
+      Phase 1 で確実に価値を出す4機能と、Phase 2 で追加する2機能の計6本柱。
+    </p>
+
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <!-- 1 -->
+      <div class="card p-6">
+        <div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary">
+          <svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M12 22s-7-8-7-13a7 7 0 1 1 14 0c0 5-7 13-7 13z"/><circle cx="12" cy="9" r="2.5"/></svg>
+        </div>
+        <div class="mt-4 text-base font-bold text-ink">地図で取引先を俯瞰</div>
+        <p class="mt-2 text-sm text-ink-muted leading-relaxed">ランク × 最終訪問日の2軸でピン色分け。停滞Accountが赤で一目瞭然。</p>
+      </div>
+      <!-- 2 -->
+      <div class="card p-6">
+        <div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary">
+          <svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><path d="M12 19v4"/></svg>
+        </div>
+        <div class="mt-4 text-base font-bold text-ink">3秒で商談を残す音声メモ</div>
+        <p class="mt-2 text-sm text-ink-muted leading-relaxed">画面最上部の大型マイクボタン。録音して閉じるだけで記録完了。</p>
+      </div>
+      <!-- 3 -->
+      <div class="card p-6">
+        <div class="w-10 h-10 rounded-xl bg-primary-50 flex items-center justify-center text-primary">
+          <svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        </div>
+        <div class="mt-4 text-base font-bold text-ink">取引先ごとの商談タイムライン</div>
+        <p class="mt-2 text-sm text-ink-muted leading-relaxed">訪問履歴・商談・担当者が Account Detail で時系列に並ぶ。</p>
+      </div>
+      <!-- 4 -->
+      <div class="card p-6">
+        <div class="w-10 h-10 rounded-xl bg-danger/10 flex items-center justify-center text-danger">
+          <svg class="ico ico-lg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/></svg>
+        </div>
+        <div class="mt-4 text-base font-bold text-ink">停滞Accountの自動ハイライト</div>
+        <p class="mt-2 text-sm text-ink-muted leading-relaxed">Aランク × 60日未訪問を毎朝自動検出、Home のバッジと朝7:30のアラート通知。</p>
+      </div>
+      <!-- 5 -->
+      <div class="card p-6 relative">
+        <div class="absolute top-4 right-4">
+          <span class="chip warn text-[10px]">Phase 2</span>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent-dark">
+          <svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M3 11l18-5v12L3 21v-10z"/><path d="M11 8v13"/></svg>
+        </div>
+        <div class="mt-4 text-base font-bold text-ink">ルート順提案</div>
+        <p class="mt-2 text-sm text-ink-muted leading-relaxed">Google Routes API で訪問先の最適巡回順を自動算出。</p>
+      </div>
+      <!-- 6 -->
+      <div class="card p-6 relative">
+        <div class="absolute top-4 right-4">
+          <span class="chip warn text-[10px]">Phase 2</span>
+        </div>
+        <div class="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center text-accent-dark">
+          <svg class="ico ico-lg" viewBox="0 0 24 24"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 3v4M16 3v4M3 11h18"/></svg>
+        </div>
+        <div class="mt-4 text-base font-bold text-ink">名刺スキャン・音声文字起こし</div>
+        <p class="mt-2 text-sm text-ink-muted leading-relaxed">Gemini Speech で音声→テキスト、Gemini Vision で名刺OCR。次アクション抽出まで自動化。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 5. Data Structure                                            -->
+<!-- ============================================================ -->
+<section class="border-b border-line bg-white/60">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
+    <span class="section-label">DATA MODEL</span>
+    <h2 class="mt-4 text-2xl md:text-3xl font-bold text-ink">データ構造（簡略図）</h2>
+    <p class="mt-3 text-sm md:text-base text-ink-muted max-w-3xl leading-relaxed">
+      中核は <strong>取引先 ─ 訪問 ─ 商談メモ</strong> の1:N:N。既存 CRM（butaifarm-crm）の Account・Contact・Opportunity と同じ Supabase を共有するため、<strong>二重入力や整合性の不一致は発生しません</strong>。
+    </p>
+
+    <!-- diagram -->
+    <div class="mt-10 flex flex-col md:flex-row items-stretch gap-4">
+      <div class="card p-6 flex-1 text-center">
+        <div class="text-[10px] text-ink-soft font-semibold tracking-widest">TABLE</div>
+        <div class="text-base font-bold text-ink mt-1">取引先 (Account)</div>
+        <div class="text-xs text-ink-muted mt-2 leading-relaxed">会社名 · 住所 · ランク<br/>担当者 · 最終訪問日<br/>緯度経度</div>
+        <div class="text-[10px] text-primary font-semibold mt-3">CRM と共有</div>
+      </div>
+      <div class="flex md:flex-col items-center justify-center text-ink-soft">
+        <div class="text-[10px] font-bold tracking-widest">1:N</div>
+        <svg class="ico ico-lg md:rotate-0" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </div>
+      <div class="card p-6 flex-1 text-center border-primary border-2">
+        <div class="text-[10px] text-primary font-semibold tracking-widest">NEW</div>
+        <div class="text-base font-bold text-ink mt-1">訪問 (Visit)</div>
+        <div class="text-xs text-ink-muted mt-2 leading-relaxed">訪問予定時刻 · 到着/退出<br/>滞在時間 · 用件<br/>位置情報 · 状態</div>
+        <div class="text-[10px] text-primary font-semibold mt-3">本アプリ固有</div>
+      </div>
+      <div class="flex md:flex-col items-center justify-center text-ink-soft">
+        <div class="text-[10px] font-bold tracking-widest">1:N</div>
+        <svg class="ico ico-lg" viewBox="0 0 24 24"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+      </div>
+      <div class="card p-6 flex-1 text-center border-primary border-2">
+        <div class="text-[10px] text-primary font-semibold tracking-widest">NEW</div>
+        <div class="text-base font-bold text-ink mt-1">商談メモ (VisitNote)</div>
+        <div class="text-xs text-ink-muted mt-2 leading-relaxed">本文 · 音声ファイル<br/>会った人 · 次のアクション<br/>Opportunity 紐付</div>
+        <div class="text-[10px] text-primary font-semibold mt-3">本アプリ固有</div>
+      </div>
+    </div>
+
+    <div class="mt-8 callout p-4 md:p-6">
+      <div class="text-xs text-primary font-bold tracking-widest">CRM 連携</div>
+      <p class="mt-1 text-sm text-ink leading-relaxed">
+        既存 <strong>butaifarm-crm</strong>（Next.js + Supabase PostgreSQL）と同じデータベースを共有。Account の更新は CRM 側で行い、本アプリからは read のみ。Visit / VisitNote は本アプリから書き込み、CRM 側でも参照可能。単一 source of truth を維持します。
+      </p>
+      <p class="mt-2 text-xs text-ink-muted">
+        詳細テーブル定義は <a href="./design/sales-route-planner-appsheet.md" class="text-primary underline font-semibold">詳細設計書</a> を参照。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 6. Tech Stack                                                -->
+<!-- ============================================================ -->
+<section class="border-b border-line">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
+    <span class="section-label">TECH STACK</span>
+    <h2 class="mt-4 text-2xl md:text-3xl font-bold text-ink">技術スタックと構築方針</h2>
+    <p class="mt-3 text-sm md:text-base text-ink-muted max-w-3xl leading-relaxed">
+      <strong>コードを書かないノーコード構築</strong>。保守は非エンジニアでも可能。
+    </p>
+
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="card p-5">
+        <div class="text-[10px] text-ink-soft font-semibold tracking-widest">APP PLATFORM</div>
+        <div class="mt-1 text-base font-bold text-ink">AppSheet (Google)</div>
+        <p class="mt-2 text-xs text-ink-muted leading-relaxed">Google 公式ノーコード。ビュー・アクション・自動化を設定ベースで構築。</p>
+      </div>
+      <div class="card p-5">
+        <div class="text-[10px] text-ink-soft font-semibold tracking-widest">DATABASE</div>
+        <div class="mt-1 text-base font-bold text-ink">Supabase PostgreSQL</div>
+        <p class="mt-2 text-xs text-ink-muted leading-relaxed">本番は CRM と共用。デモは Google Sheets でも可（サンプル10件）。</p>
+      </div>
+      <div class="card p-5">
+        <div class="text-[10px] text-ink-soft font-semibold tracking-widest">MAP</div>
+        <div class="mt-1 text-base font-bold text-ink">Google Maps Platform</div>
+        <p class="mt-2 text-xs text-ink-muted leading-relaxed">地図描画・住所→座標・ルート最適化・ナビ起動を一括提供。</p>
+      </div>
+      <div class="card p-5">
+        <div class="text-[10px] text-ink-soft font-semibold tracking-widest">STORAGE</div>
+        <div class="mt-1 text-base font-bold text-ink">Google Drive</div>
+        <p class="mt-2 text-xs text-ink-muted leading-relaxed">音声・画像ファイルは Workspace 容量内に保存。別途ストレージ契約不要。</p>
+      </div>
+      <div class="card p-5">
+        <div class="text-[10px] text-ink-soft font-semibold tracking-widest">AUTOMATION</div>
+        <div class="mt-1 text-base font-bold text-ink">Apps Script</div>
+        <p class="mt-2 text-xs text-ink-muted leading-relaxed">ルート最適化・音声文字起こし・通知など AppSheet の外側を担当。</p>
+      </div>
+      <div class="card p-5">
+        <div class="text-[10px] text-ink-soft font-semibold tracking-widest">AI</div>
+        <div class="mt-1 text-base font-bold text-ink">Gemini (Google)</div>
+        <p class="mt-2 text-xs text-ink-muted leading-relaxed">音声文字起こし / 次アクション抽出 / 名刺 OCR。Phase 2 以降。</p>
+      </div>
+    </div>
+
+    <!-- approach -->
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="callout p-5">
+        <div class="text-xs text-primary font-bold tracking-widest">APPROACH 1</div>
+        <div class="mt-1 text-base font-bold text-ink">コードを書かないノーコード構築</div>
+        <p class="mt-2 text-xs text-ink-muted leading-relaxed">AppSheet Editor 上で View・Action・Bot を GUI 設定。スキーマ変更と式編集のみで完結します。</p>
+      </div>
+      <div class="callout p-5">
+        <div class="text-xs text-primary font-bold tracking-widest">APPROACH 2</div>
+        <div class="mt-1 text-base font-bold text-ink">保守は非エンジニアでも可能</div>
+        <p class="mt-2 text-xs text-ink-muted leading-relaxed">「色を変えたい」「フィルタ追加したい」は情シス・営業事務が直接調整できる構造。開発依存から脱却します。</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 7. Cost                                                      -->
+<!-- ============================================================ -->
+<section class="border-b border-line bg-white/60">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
+    <span class="section-label">COST</span>
+    <h2 class="mt-4 text-2xl md:text-3xl font-bold text-ink">コスト試算（2026-04 時点・営業5名）</h2>
+    <p class="mt-3 text-sm md:text-base text-ink-muted max-w-3xl leading-relaxed">
+      <strong>市販 SaaS の1/3コスト</strong>で同等の機能を実現。年間10万円以上の差額が生まれます。
+    </p>
+
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Case A -->
+      <div class="card p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs text-primary font-bold tracking-widest">CASE A</div>
+            <div class="mt-1 text-base font-bold text-ink">Google Workspace 加入済</div>
+          </div>
+          <div class="text-right">
+            <div class="text-[10px] text-ink-soft">月額合計</div>
+            <div class="text-2xl font-bold text-primary num">$35〜40</div>
+            <div class="text-[10px] text-ink-muted num">(約 5,500円)</div>
+          </div>
+        </div>
+        <table class="mt-5 w-full text-xs">
+          <thead>
+            <tr class="text-ink-soft border-b border-line">
+              <th class="text-left py-2 font-semibold">項目</th>
+              <th class="text-right py-2 font-semibold">月額</th>
+            </tr>
+          </thead>
+          <tbody class="text-ink num">
+            <tr class="border-b border-line/50">
+              <td class="py-2">AppSheet Core × 5名</td>
+              <td class="py-2 text-right">$0 <span class="text-[10px] text-ink-soft">(Workspace 同梱)</span></td>
+            </tr>
+            <tr class="border-b border-line/50">
+              <td class="py-2">Google Maps Platform</td>
+              <td class="py-2 text-right">$11</td>
+            </tr>
+            <tr class="border-b border-line/50">
+              <td class="py-2">Gemini (音声・AI)</td>
+              <td class="py-2 text-right">$23〜26</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-ink-muted">Supabase (既存)</td>
+              <td class="py-2 text-right text-ink-muted">$0 (増分なし)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Case B -->
+      <div class="card p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <div class="text-xs text-ink-muted font-bold tracking-widest">CASE B</div>
+            <div class="mt-1 text-base font-bold text-ink">Workspace 未加入</div>
+          </div>
+          <div class="text-right">
+            <div class="text-[10px] text-ink-soft">月額合計</div>
+            <div class="text-2xl font-bold text-ink num">$85〜90</div>
+            <div class="text-[10px] text-ink-muted num">(約 13,000円)</div>
+          </div>
+        </div>
+        <table class="mt-5 w-full text-xs">
+          <thead>
+            <tr class="text-ink-soft border-b border-line">
+              <th class="text-left py-2 font-semibold">項目</th>
+              <th class="text-right py-2 font-semibold">月額</th>
+            </tr>
+          </thead>
+          <tbody class="text-ink num">
+            <tr class="border-b border-line/50">
+              <td class="py-2">AppSheet Core × 5名</td>
+              <td class="py-2 text-right">$50</td>
+            </tr>
+            <tr class="border-b border-line/50">
+              <td class="py-2">Google Maps Platform</td>
+              <td class="py-2 text-right">$11</td>
+            </tr>
+            <tr class="border-b border-line/50">
+              <td class="py-2">Gemini (音声・AI)</td>
+              <td class="py-2 text-right">$23〜26</td>
+            </tr>
+            <tr>
+              <td class="py-2 text-ink-muted">Supabase (既存)</td>
+              <td class="py-2 text-right text-ink-muted">$0 (増分なし)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- SaaS comparison -->
+    <div class="mt-10 card p-6">
+      <div class="text-xs text-accent-dark font-bold tracking-widest">COMPARISON</div>
+      <div class="mt-2 text-base font-bold text-ink">市販 SaaS（Salesforce Maps / cyzen / GeoPro 等）との比較</div>
+      <div class="mt-5 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div class="text-center p-4 rounded-xl bg-paper border border-line">
+          <div class="text-[10px] text-ink-soft font-semibold">市販 SaaS</div>
+          <div class="mt-1 text-xl font-bold text-ink num">月 3,000〜5,000円/人</div>
+          <div class="mt-1 text-xs text-ink-muted num">= 年間 18〜30 万円 (5名)</div>
+        </div>
+        <div class="text-center p-4 rounded-xl bg-primary-50 border-2 border-primary">
+          <div class="text-[10px] text-primary font-bold">本アプリ (Case A)</div>
+          <div class="mt-1 text-xl font-bold text-primary num">月 5,500円</div>
+          <div class="mt-1 text-xs text-primary num">= 年間 6.6 万円</div>
+        </div>
+        <div class="text-center p-4 rounded-xl bg-accent/10 border border-accent">
+          <div class="text-[10px] text-accent-dark font-bold">差額 (年間)</div>
+          <div class="mt-1 text-xl font-bold text-accent-dark num">約 10〜23 万円</div>
+          <div class="mt-1 text-xs text-accent-dark">初期投資 1 年未満で回収</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 8. Roadmap                                                   -->
+<!-- ============================================================ -->
+<section class="border-b border-line">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
+    <span class="section-label">ROADMAP</span>
+    <h2 class="mt-4 text-2xl md:text-3xl font-bold text-ink">ロードマップ</h2>
+    <p class="mt-3 text-sm md:text-base text-ink-muted max-w-3xl leading-relaxed">
+      Phase を3段階に分け、段階的に投資判断できる構造。Phase 1 が本資料のデモ範囲です。
+    </p>
+
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <!-- Phase 1 -->
+      <div class="card p-6 relative">
+        <div class="absolute top-4 right-4">
+          <span class="chip active text-[10px]">本資料のデモ</span>
+        </div>
+        <div class="text-[10px] text-primary font-bold tracking-widest">PHASE 1</div>
+        <div class="mt-1 text-base font-bold text-ink">1 週間</div>
+        <div class="mt-4 text-sm font-bold text-ink">地図・記録・履歴</div>
+        <ul class="mt-3 space-y-1.5 text-xs text-ink-muted">
+          <li class="flex gap-1.5"><span class="text-primary">•</span>取引先マップ + 2軸ピン色分け</li>
+          <li class="flex gap-1.5"><span class="text-primary">•</span>訪問開始/終了・音声録音</li>
+          <li class="flex gap-1.5"><span class="text-primary">•</span>Account Detail・訪問履歴</li>
+          <li class="flex gap-1.5"><span class="text-primary">•</span>Home ダッシュボード</li>
+        </ul>
+      </div>
+      <!-- Phase 2 -->
+      <div class="card p-6">
+        <div class="text-[10px] text-accent-dark font-bold tracking-widest">PHASE 2</div>
+        <div class="mt-1 text-base font-bold text-ink">+ 1 週間</div>
+        <div class="mt-4 text-sm font-bold text-ink">ルート最適化・AI連携</div>
+        <ul class="mt-3 space-y-1.5 text-xs text-ink-muted">
+          <li class="flex gap-1.5"><span class="text-accent-dark">•</span>Google Routes API で巡回最適化</li>
+          <li class="flex gap-1.5"><span class="text-accent-dark">•</span>Gemini Speech で音声文字起こし</li>
+          <li class="flex gap-1.5"><span class="text-accent-dark">•</span>次アクション自動抽出</li>
+          <li class="flex gap-1.5"><span class="text-accent-dark">•</span>Opportunity 連携</li>
+        </ul>
+      </div>
+      <!-- Phase 3 -->
+      <div class="card p-6">
+        <div class="text-[10px] text-ink-soft font-bold tracking-widest">PHASE 3</div>
+        <div class="mt-1 text-base font-bold text-ink">+ 1 週間</div>
+        <div class="mt-4 text-sm font-bold text-ink">OCR・通知・オフライン</div>
+        <ul class="mt-3 space-y-1.5 text-xs text-ink-muted">
+          <li class="flex gap-1.5"><span class="text-ink-soft">•</span>名刺 OCR（Gemini Vision）</li>
+          <li class="flex gap-1.5"><span class="text-ink-soft">•</span>Slack 通知（停滞アラート）</li>
+          <li class="flex gap-1.5"><span class="text-ink-soft">•</span>オフラインモード最適化</li>
+          <li class="flex gap-1.5"><span class="text-ink-soft">•</span>訪問 KPI ダッシュボード</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- timeline -->
+    <div class="mt-10 card p-6">
+      <div class="text-xs text-ink-soft font-bold tracking-widest">SCHEDULE</div>
+      <div class="mt-4 flex items-center">
+        <div class="h-2 bg-primary rounded-l-full flex-1 text-white text-[10px] font-bold flex items-center justify-center" style="min-width:33%">Phase 1 · Week 1</div>
+        <div class="h-2 bg-accent flex-1 text-white text-[10px] font-bold flex items-center justify-center" style="min-width:33%">Phase 2 · Week 2</div>
+        <div class="h-2 bg-ink-soft rounded-r-full flex-1 text-white text-[10px] font-bold flex items-center justify-center" style="min-width:33%">Phase 3 · Week 3</div>
+      </div>
+      <p class="mt-4 text-xs text-ink-muted leading-relaxed">
+        合計 2〜3 週間で本番配布可能。各 Phase の終了時点で「継続するか / 次 Phase に進むか」の判断ゲートを設けます。
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 9. Next Steps                                                -->
+<!-- ============================================================ -->
+<section class="border-b border-line bg-primary text-white">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-16 md:py-20">
+    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 text-[11px] font-semibold tracking-widest">
+      <span class="w-1.5 h-1.5 rounded-full bg-accent"></span>
+      NEXT STEPS
+    </div>
+    <h2 class="mt-4 text-2xl md:text-3xl font-bold">次のステップ</h2>
+    <p class="mt-3 text-sm md:text-base text-white/80 max-w-3xl leading-relaxed">
+      本企画の合意が取れた日から、最短 30 分で試作に着手できます。
+    </p>
+
+    <div class="mt-10 grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="rounded-2xl border border-white/20 bg-white/5 p-6">
+        <div class="w-10 h-10 rounded-full bg-accent text-primary-dark font-bold text-base flex items-center justify-center">1</div>
+        <div class="mt-4 text-base font-bold">デモ構築</div>
+        <p class="mt-2 text-xs text-white/80 leading-relaxed">Google Sheets に10取引先を投入、AppSheet で View 作成。<strong>所要 30〜60分</strong>。</p>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/5 p-6">
+        <div class="w-10 h-10 rounded-full bg-accent text-primary-dark font-bold text-base flex items-center justify-center">2</div>
+        <div class="mt-4 text-base font-bold">1週間の試用</div>
+        <p class="mt-2 text-xs text-white/80 leading-relaxed">営業1名に iPhone/iPad で実運用してもらい、記録率・所要時間・違和感をヒアリング。</p>
+      </div>
+      <div class="rounded-2xl border border-white/20 bg-white/5 p-6">
+        <div class="w-10 h-10 rounded-full bg-accent text-primary-dark font-bold text-base flex items-center justify-center">3</div>
+        <div class="mt-4 text-base font-bold">フィードバック → Phase 2 着手</div>
+        <p class="mt-2 text-xs text-white/80 leading-relaxed">デモで得た改善点を反映し、ルート最適化・音声文字起こしの Phase 2 へ。</p>
+      </div>
+    </div>
+
+    <!-- confirm items -->
+    <div class="mt-10 rounded-2xl bg-white/5 border border-white/20 p-6">
+      <div class="text-[11px] font-bold tracking-widest text-accent">CONFIRM BEFORE START</div>
+      <div class="mt-2 text-sm font-bold">開始前の確認事項（4項目）</div>
+      <ul class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-2 text-xs text-white/85">
+        <li class="flex gap-2"><span class="text-accent">Q1</span>Google Workspace の加入プラン（コスト試算 Case A/B を確定）</li>
+        <li class="flex gap-2"><span class="text-accent">Q2</span>営業5名のアカウント種別（@gmail.com / Workspace）</li>
+        <li class="flex gap-2"><span class="text-accent">Q3</span>既存 CRM (butaifarm-crm) を継続前提とするか</li>
+        <li class="flex gap-2"><span class="text-accent">Q4</span>AppSheet Editor 編集権限を誰に付与するか</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ -->
+<!-- 10. Footer                                                   -->
+<!-- ============================================================ -->
+<footer class="bg-paper">
+  <div class="max-w-6xl mx-auto px-6 md:px-10 py-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-end">
+      <div>
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 rounded-md bg-primary text-white flex items-center justify-center font-bold text-xs">SP</div>
+          <div>
+            <div class="text-sm font-bold text-ink">営業訪問プランナー (仮称)</div>
+            <div class="text-[11px] text-ink-muted">Sales Route Planner for Butai Farm</div>
+          </div>
+        </div>
+        <p class="mt-4 text-xs text-ink-muted max-w-lg leading-relaxed">
+          本企画書は営業5名規模の Phase 1 配布を前提としたものです。Phase 2/3 の詳細仕様・試算は、Phase 1 の実機フィードバック完了後に確定します。
+        </p>
+      </div>
+      <div class="text-sm text-ink-muted">
+        <div class="text-[10px] text-ink-soft font-semibold tracking-widest mb-2">RELATED DOCS</div>
+        <ul class="space-y-1">
+          <li><a class="text-primary underline" href="./design/sales-route-planner-appsheet.md">詳細設計書 (architect)</a></li>
+          <li><a class="text-primary underline" href="./design/appsheet-ux-brief.md">UX brief (ui-designer)</a></li>
+          <li><a class="text-primary underline" href="./demo-setup-guide.md">デモセットアップガイド</a></li>
+        </ul>
+      </div>
+    </div>
+    <hr class="my-8 border-line" />
+    <div class="flex flex-col md:flex-row items-start md:items-center justify-between text-[11px] text-ink-soft gap-2">
+      <div>© 2026 舞台ファーム / 営業DXプロジェクト</div>
+      <div class="flex items-center gap-4">
+        <span>最終更新 <span class="num">2026-04-24</span></span>
+        <span>作成 ui-designer</span>
+        <span>v1.0</span>
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
