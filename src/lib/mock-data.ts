@@ -46,7 +46,7 @@ export const mockUsers: User[] = [
 ];
 
 // ============= Accounts =============
-// 東京23区＋多摩エリア。acc-010 を 162日前にして停滞バッジ＋赤ピンの主役にする
+// 東京23区＋多摩エリア。acc-005 を 32日前にして停滞バッジ＋赤ピンの主役にする
 export const mockAccounts: Account[] = [
   {
     id: "acc-001",
@@ -174,20 +174,6 @@ export const mockAccounts: Account[] = [
     lastVisitAt: daysAgo(5),
     ownerId: "usr-02",
   },
-  {
-    id: "acc-010",
-    name: "焼肉 大吉",
-    nameKana: "ヤキニクダイキチ",
-    rank: "A",
-    category: "焼肉",
-    billingAddress: "東京都新宿区歌舞伎町1-5-3",
-    geoLat: 35.6957,
-    geoLng: 139.7022,
-    phone: "03-3209-1010",
-    note: "★162日未訪問。停滞 Account（デモの赤ピン候補）",
-    lastVisitAt: daysAgo(162),
-    ownerId: "usr-01",
-  },
 ];
 
 // ============= Contacts =============
@@ -205,8 +191,6 @@ export const mockContacts: Contact[] = [
   { id: "ctc-011", accountId: "acc-007", name: "菅原 健", nameKana: "スガワラケン", role: "物産担当", email: null, phone: null, isPrimary: true },
   { id: "ctc-012", accountId: "acc-008", name: "伊藤 修", nameKana: "イトウオサム", role: "代表", email: null, phone: "03-3398-1008", isPrimary: true },
   { id: "ctc-013", accountId: "acc-009", name: "遠藤 久美子", nameKana: "エンドウクミコ", role: "女将", email: null, phone: null, isPrimary: true },
-  { id: "ctc-014", accountId: "acc-010", name: "小野寺 浩二", nameKana: "オノデラコウジ", role: "店長", email: null, phone: "03-3209-1010", isPrimary: true },
-  { id: "ctc-015", accountId: "acc-010", name: "岡田 健太", nameKana: "オカダケンタ", role: "仕入れ担当", email: null, phone: null, isPrimary: false },
 ];
 
 // ============= Opportunities =============

@@ -24,7 +24,7 @@ const PAGES = [
   },
   {
     name: 'mobile-account-detail',
-    path: '/accounts/acc-010',
+    path: '/accounts/acc-005',
     device: 'mobile',
     fullPage: false,
     waitMs: 1500,
@@ -54,7 +54,7 @@ const PAGES = [
   },
   {
     name: 'desktop-account-detail',
-    path: '/accounts/acc-010',
+    path: '/accounts/acc-005',
     device: 'desktop',
     fullPage: true,
     waitMs: 1500,
