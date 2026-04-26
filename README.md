@@ -46,6 +46,9 @@ npm run dev
 | `npm run db:push` | schema を DB に反映（migration 履歴なし） |
 | `npm run db:reset` | DB を完全リセット（データ消える） |
 | `npm run db:generate` | Prisma Client 再生成 |
+| `npm run overview:pdf` | 概要書 PDF を再生成（`docs/OVERVIEW.md` → `docs/OVERVIEW.pdf`） |
+| `npm run overview:screenshots` | アプリ画面のスクショを取り直し（`docs/screenshots/`） |
+| `npm run overview:rebuild` | スクショ → PDF を一括再生成（dev サーバ起動状態で） |
 
 ## ディレクトリ構成
 
@@ -103,6 +106,60 @@ npm run seed
 5. 🎤 録音ボタンで音声メモ or テキスト入力
 6. 「✓ 訪問を終了する」→ Home に戻り「今日の訪問 3/5件」に更新
 7. 今日のルート（Deck View）で3件が時刻順に並ぶ
+
+## 概要書（提案資料）の編集
+
+クライアントに渡す概要書は **2 ファイル**で管理:
+
+| ファイル | 用途 | 編集する? |
+|---|---|---|
+| `docs/OVERVIEW.md` | 内容のソース（テキスト・スクショ参照） | **✅ ここを編集** |
+| `docs/OVERVIEW.pdf` | 配布用の出力（自動生成） | ❌ 直接編集しない |
+| `docs/OVERVIEW.html` | PDF 化の中間ファイル | ❌ 直接編集しない |
+| `docs/screenshots/*.png` | 埋め込み画像 | UI 改修時に再撮影 |
+
+### 文言や構成を変えたいとき
+
+```bash
+# 1. 編集（VS Code / Cursor などで開く）
+code docs/OVERVIEW.md
+
+# 2. PDF を再生成
+npm run overview:pdf
+
+# 3. 反映確認
+open docs/OVERVIEW.pdf
+
+# 4. GitHub に反映（クライアント送付 URL も自動更新される）
+git add docs/OVERVIEW.md docs/OVERVIEW.pdf docs/OVERVIEW.html
+git commit -m "概要書を更新"
+git push
+```
+
+### スクショを取り直したいとき（UI 改修後など）
+
+```bash
+# 別ターミナルで dev サーバ起動
+npm run dev   # http://localhost:3001 で立ち上がる前提
+
+# 元のターミナルで
+npm run overview:rebuild   # スクショ取得 → PDF 再生成
+```
+
+公開 URL は自動で同じ場所のまま:
+- 概要書 PDF: https://github.com/yoshinagak-sudo/sales-route-planner/raw/main/docs/OVERVIEW.pdf
+- 概要書 Markdown: https://github.com/yoshinagak-sudo/sales-route-planner/blob/main/docs/OVERVIEW.md
+
+### よくある編集パターン
+
+| やりたいこと | どこを編集 |
+|---|---|
+| キャッチコピーの変更 | `OVERVIEW.md` 上部 `> **...**` 行 |
+| 機能説明の文言変更 | `OVERVIEW.md` の `### 1. ...` 〜 `### 4. ...` |
+| デモ URL を本番に差し替え | `OVERVIEW.md` 上部 `🔗 デモ:` の行 |
+| スクショの差し替え | UI 修正後 `npm run overview:screenshots` |
+| ブランドカラー変更 | `scripts/build-pdf.js` の CSS 変数（`--brand` 等） |
+| 機能を1つ追加 | `OVERVIEW.md` に `### 5. ...` を追記、必要ならスクショも追加 |
 
 ## 本番化
 

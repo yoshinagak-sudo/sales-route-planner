@@ -11,7 +11,10 @@
     "db:push": "prisma db push",
     "db:migrate": "prisma migrate dev",
     "db:reset": "prisma migrate reset --force",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "overview:pdf": "node scripts/build-pdf.js",
+    "overview:screenshots": "SCREENSHOT_BASE_URL=${SCREENSHOT_BASE_URL:-http://localhost:3001} node scripts/take-screenshots.js",
+    "overview:rebuild": "npm run overview:screenshots && npm run overview:pdf"
   },
   "prisma": {
     "seed": "tsx prisma/seed.ts"
