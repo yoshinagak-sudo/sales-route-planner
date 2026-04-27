@@ -1,5 +1,3 @@
-import { DORMANT_DAYS_THRESHOLD } from "./types";
-
 const WEEKDAY = ["日", "月", "火", "水", "木", "金", "土"];
 
 /** YYYY-MM-DD(曜) 形式 */
@@ -40,18 +38,6 @@ export function daysSince(d: Date | string | null | undefined): number | null {
   if (Number.isNaN(date.getTime())) return null;
   const diffMs = Date.now() - date.getTime();
   return Math.floor(diffMs / (1000 * 60 * 60 * 24));
-}
-
-/** 停滞判定（A:60日, B:90日, C:無視） */
-export function isDormant(
-  rank: string,
-  lastVisitAt: Date | string | null | undefined,
-): boolean {
-  const days = daysSince(lastVisitAt);
-  if (days === null) return rank !== "C"; // 未訪問は A/B なら停滞扱い
-  if (rank === "A") return days >= DORMANT_DAYS_THRESHOLD;
-  if (rank === "B") return days >= 60;
-  return false;
 }
 
 /** メートル → 1,234m / 12.3km 表記 */

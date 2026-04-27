@@ -10,11 +10,8 @@ import {
   Activity,
 } from "lucide-react";
 import { getAccounts, getAllContacts, getUsers } from "@/lib/db";
-import { formatDateJP, daysSince, formatDuration } from "@/lib/format";
+import { formatDateJP, formatDuration } from "@/lib/format";
 import {
-  ACCOUNT_RANK_LABEL,
-  DORMANT_DAYS_THRESHOLD,
-  type Account,
   type Opportunity,
   type User,
   type Visit,
@@ -26,7 +23,6 @@ import {
   mockVisitNotes,
   mockOpportunities,
 } from "@/lib/mock-data";
-import { BadgeRank } from "@/components/BadgeRank";
 import {
   Tabs,
   TabsList,
@@ -61,13 +57,6 @@ function isCompletedNoteMissing(visit: Visit): boolean {
   return !mockVisitNotes.some((n) => n.visitId === visit.id);
 }
 
-function isDormantA(account: Account): boolean {
-  if (account.rank !== "A") return false;
-  const days = daysSince(account.lastVisitAt);
-  if (days === null) return true;
-  return days >= DORMANT_DAYS_THRESHOLD;
-}
-
 // ============= ページ本体 =============
 
 export default async function AdminPage() {
@@ -87,13 +76,6 @@ export default async function AdminPage() {
     (v) => v.status === "COMPLETED",
   ).length;
   const pendingNoteCountAll = mockVisits.filter(isCompletedNoteMissing).length;
-  const dormantAccountsAll = mockAccounts
-    .filter(isDormantA)
-    .sort((a, b) => {
-      const ta = a.lastVisitAt?.getTime() ?? 0;
-      const tb = b.lastVisitAt?.getTime() ?? 0;
-      return ta - tb;
-    });
   const openOpps = mockOpportunities.filter((o) => o.status === "OPEN");
   const openOppsAmount = openOpps.reduce((sum, o) => sum + (o.amount ?? 0), 0);
 
@@ -104,7 +86,6 @@ export default async function AdminPage() {
     todayPlanned: number;
     todayCompleted: number;
     pendingNote: number;
-    dormantA: number;
   };
   const salesRows: SalesRow[] = mockUsers.map((user) => {
     const userAccounts = mockAccounts.filter((a) => a.ownerId === user.id);
@@ -112,7 +93,6 @@ export default async function AdminPage() {
     const userPendingNote = mockVisits.filter(
       (v) => v.ownerId === user.id && isCompletedNoteMissing(v),
     ).length;
-    const userDormantA = userAccounts.filter(isDormantA).length;
     return {
       user,
       accountCount: userAccounts.length,
@@ -120,7 +100,6 @@ export default async function AdminPage() {
       todayCompleted: userTodayVisits.filter((v) => v.status === "COMPLETED")
         .length,
       pendingNote: userPendingNote,
-      dormantA: userDormantA,
     };
   });
 
@@ -208,7 +187,7 @@ export default async function AdminPage() {
             {/* 1) KPI サマリー */}
             <section
               aria-label="全社 KPI サマリー"
-              className="grid grid-cols-2 md:grid-cols-4 gap-3"
+              className="grid grid-cols-1 sm:grid-cols-3 gap-3"
             >
               <KpiCard
                 label="本日の訪問予定"
@@ -233,14 +212,6 @@ export default async function AdminPage() {
                 }
                 icon={<AlertTriangle className="size-4" />}
                 tone={pendingNoteCountAll > 0 ? "warn" : "default"}
-              />
-              <KpiCard
-                label="停滞 A ランク"
-                value={String(dormantAccountsAll.length)}
-                unit="社"
-                hint={`30日超 / Aランク${mockAccounts.filter((a) => a.rank === "A").length}社中`}
-                icon={<AlertTriangle className="size-4" />}
-                tone={dormantAccountsAll.length > 0 ? "danger" : "default"}
               />
               <KpiCard
                 label="進行中の商談"
@@ -275,7 +246,6 @@ export default async function AdminPage() {
                       <TableHead className="text-right">今日の予定</TableHead>
                       <TableHead className="text-right">完了</TableHead>
                       <TableHead className="text-right">未記録</TableHead>
-                      <TableHead className="text-right">停滞 A</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -305,14 +275,6 @@ export default async function AdminPage() {
                         >
                           {row.pendingNote}
                         </TableCell>
-                        <TableCell
-                          className={cn(
-                            "text-right tabular-nums",
-                            row.dormantA > 0 && "text-danger font-semibold",
-                          )}
-                        >
-                          {row.dormantA}
-                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
@@ -320,83 +282,7 @@ export default async function AdminPage() {
               </div>
             </section>
 
-            {/* 3) 停滞アカウント横断一覧 */}
-            <section aria-labelledby="dormant-heading">
-              <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle className="size-4 text-danger" />
-                <h2
-                  id="dormant-heading"
-                  className="text-sm font-medium text-muted-foreground"
-                >
-                  停滞アカウント（A × 30日超）
-                </h2>
-                <span className="ml-auto text-[11px] text-muted-foreground tabular-nums">
-                  {dormantAccountsAll.length} 件
-                </span>
-              </div>
-              {dormantAccountsAll.length === 0 ? (
-                <div className="rounded-lg border border-border bg-card px-4 py-6 text-center text-sm text-muted-foreground">
-                  停滞中の A ランク取引先はありません
-                </div>
-              ) : (
-                <div className="rounded-lg border border-border bg-card overflow-x-auto">
-                  <Table>
-                    <TableHeader>
-                      <TableRow className="bg-muted/40 hover:bg-muted/40">
-                        <TableHead>会社名</TableHead>
-                        <TableHead className="w-16">ランク</TableHead>
-                        <TableHead className="hidden md:table-cell">
-                          担当営業
-                        </TableHead>
-                        <TableHead className="hidden sm:table-cell text-right">
-                          最終訪問
-                        </TableHead>
-                        <TableHead className="text-right">経過</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {dormantAccountsAll.slice(0, 10).map((a) => {
-                        const d = daysSince(a.lastVisitAt);
-                        return (
-                          <TableRow key={a.id}>
-                            <TableCell className="font-medium">
-                              <Link
-                                href={`/accounts/${a.id}`}
-                                className="hover:underline"
-                              >
-                                {a.name}
-                              </Link>
-                              <span className="block text-[11px] text-muted-foreground font-normal truncate max-w-[36ch]">
-                                {a.billingAddress}
-                              </span>
-                            </TableCell>
-                            <TableCell>
-                              <span
-                                className="inline-flex items-center gap-1.5"
-                                aria-label={ACCOUNT_RANK_LABEL[a.rank]}
-                              >
-                                <BadgeRank rank={a.rank} />
-                              </span>
-                            </TableCell>
-                            <TableCell className="hidden md:table-cell text-muted-foreground">
-                              {userById.get(a.ownerId)?.name ?? "-"}
-                            </TableCell>
-                            <TableCell className="hidden sm:table-cell text-right tabular-nums text-xs text-muted-foreground">
-                              {formatDateJP(a.lastVisitAt)}
-                            </TableCell>
-                            <TableCell className="text-right tabular-nums text-danger font-semibold">
-                              {d === null ? "未訪問" : `${d}日`}
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })}
-                    </TableBody>
-                  </Table>
-                </div>
-              )}
-            </section>
-
-            {/* 4) 進行中商談一覧 */}
+            {/* 3) 進行中商談一覧 */}
             <section aria-labelledby="opps-heading">
               <div className="flex items-center gap-2 mb-2">
                 <TrendingUp className="size-4 text-brand" />
@@ -496,7 +382,7 @@ export default async function AdminPage() {
               )}
             </section>
 
-            {/* 5) 過去 7 日間の活動量 */}
+            {/* 4) 過去 7 日間の活動量 */}
             <section aria-labelledby="activity-heading">
               <div className="flex items-center gap-2 mb-2">
                 <Activity className="size-4 text-muted-foreground" />
@@ -551,7 +437,6 @@ export default async function AdminPage() {
               <TableHeader>
                 <TableRow className="bg-muted/40 hover:bg-muted/40">
                   <TableHead>会社名</TableHead>
-                  <TableHead className="w-20">ランク</TableHead>
                   <TableHead className="hidden sm:table-cell">担当</TableHead>
                   <TableHead className="text-right">最終訪問</TableHead>
                 </TableRow>
@@ -563,14 +448,6 @@ export default async function AdminPage() {
                       {a.name}
                       <span className="block text-[11px] text-muted-foreground font-normal truncate max-w-[36ch]">
                         {a.billingAddress}
-                      </span>
-                    </TableCell>
-                    <TableCell>
-                      <span
-                        className="inline-flex items-center gap-1.5"
-                        aria-label={ACCOUNT_RANK_LABEL[a.rank]}
-                      >
-                        <BadgeRank rank={a.rank} />
                       </span>
                     </TableCell>
                     <TableCell className="hidden sm:table-cell text-muted-foreground">

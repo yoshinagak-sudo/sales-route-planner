@@ -3,8 +3,6 @@ import { Search } from "lucide-react";
 import { getCurrentUserId } from "@/lib/auth";
 import { getAccounts } from "@/lib/db";
 import { daysSince, formatDateJP } from "@/lib/format";
-import { ACCOUNT_RANK_LABEL, type AccountRank } from "@/lib/types";
-import { BadgeRank } from "@/components/BadgeRank";
 import {
   Table,
   TableBody,
@@ -17,14 +15,7 @@ import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 
-type SP = Promise<{ q?: string; rank?: string }>;
-
-const RANK_FILTERS: Array<{ value: "" | AccountRank; label: string }> = [
-  { value: "", label: "全て" },
-  { value: "A", label: "A" },
-  { value: "B", label: "B" },
-  { value: "C", label: "C" },
-];
+type SP = Promise<{ q?: string }>;
 
 export default async function AccountsPage({
   searchParams,
@@ -33,28 +24,13 @@ export default async function AccountsPage({
 }) {
   const sp = await searchParams;
   const q = (sp?.q ?? "").trim();
-  const rankParam = sp?.rank ?? "";
-  const rank: AccountRank | null =
-    rankParam === "A" || rankParam === "B" || rankParam === "C"
-      ? rankParam
-      : null;
 
   const ownerId = await getCurrentUserId();
   const accounts = getAccounts({
     ownerId,
-    rank,
+    rank: null,
     q: q || null,
   });
-
-  const buildHref = (next: { q?: string; rank?: string }) => {
-    const params = new URLSearchParams();
-    const qv = next.q ?? q;
-    const rv = next.rank ?? rankParam;
-    if (qv) params.set("q", qv);
-    if (rv) params.set("rank", rv);
-    const qs = params.toString();
-    return qs ? `/accounts?${qs}` : "/accounts";
-  };
 
   return (
     <div className="flex flex-col gap-4">
@@ -67,7 +43,7 @@ export default async function AccountsPage({
         </div>
       </header>
 
-      {/* 検索バー + ランクフィルタ */}
+      {/* 検索バー */}
       <form
         action="/accounts"
         method="get"
@@ -91,7 +67,6 @@ export default async function AccountsPage({
             )}
           />
         </div>
-        {rankParam && <input type="hidden" name="rank" value={rankParam} />}
         <button
           type="submit"
           className="h-10 rounded-lg bg-brand text-brand-foreground px-4 text-sm font-medium hover:bg-brand-dark transition-colors"
@@ -99,28 +74,6 @@ export default async function AccountsPage({
           検索
         </button>
       </form>
-
-      <div className="flex items-center gap-2 flex-wrap">
-        <span className="text-xs text-muted-foreground mr-1">ランク:</span>
-        {RANK_FILTERS.map((f) => {
-          const active = (f.value || "") === (rankParam || "");
-          return (
-            <Link
-              key={f.value || "all"}
-              href={buildHref({ rank: f.value })}
-              className={cn(
-                "h-7 rounded-full px-3 text-xs font-medium border transition-colors",
-                active
-                  ? "bg-brand text-brand-foreground border-brand"
-                  : "border-border bg-card text-foreground hover:bg-muted",
-              )}
-              aria-pressed={active}
-            >
-              {f.label}
-            </Link>
-          );
-        })}
-      </div>
 
       {accounts.length === 0 ? (
         <div className="grid place-items-center py-16 rounded-lg border border-dashed border-border bg-muted/40">
@@ -134,7 +87,6 @@ export default async function AccountsPage({
             <TableHeader>
               <TableRow className="bg-muted/40 hover:bg-muted/40">
                 <TableHead>会社名</TableHead>
-                <TableHead className="w-16">ランク</TableHead>
                 <TableHead className="hidden sm:table-cell">カテゴリ</TableHead>
                 <TableHead className="text-right">最終訪問</TableHead>
                 <TableHead className="hidden md:table-cell">注釈</TableHead>
@@ -143,9 +95,6 @@ export default async function AccountsPage({
             <TableBody>
               {accounts.map((a) => {
                 const d = daysSince(a.lastVisitAt);
-                const isDormant =
-                  (a.rank === "A" && (d === null || d >= 60)) ||
-                  (a.rank === "B" && (d === null || d >= 90));
                 return (
                   <TableRow
                     key={a.id}
@@ -163,14 +112,6 @@ export default async function AccountsPage({
                         </span>
                       </Link>
                     </TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/accounts/${a.id}`}
-                        aria-label={ACCOUNT_RANK_LABEL[a.rank]}
-                      >
-                        <BadgeRank rank={a.rank} />
-                      </Link>
-                    </TableCell>
                     <TableCell className="hidden sm:table-cell text-muted-foreground">
                       <Link href={`/accounts/${a.id}`} className="block">
                         {a.category ?? "-"}
@@ -179,12 +120,7 @@ export default async function AccountsPage({
                     <TableCell className="text-right tabular-nums">
                       <Link
                         href={`/accounts/${a.id}`}
-                        className={cn(
-                          "block",
-                          isDormant
-                            ? "text-danger font-semibold"
-                            : "text-muted-foreground",
-                        )}
+                        className="block text-muted-foreground"
                       >
                         {d === null
                           ? "未訪問"

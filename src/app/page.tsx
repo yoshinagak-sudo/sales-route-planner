@@ -1,17 +1,14 @@
 import Link from "next/link";
-import { Map, ClipboardList, AlertTriangle, MapPin, Clock } from "lucide-react";
+import { Map, ClipboardList, AlertTriangle, Clock } from "lucide-react";
 import { getCurrentUser } from "@/lib/auth";
 import {
   getVisitsToday,
   getPendingNoteVisits,
-  getDormantAccountsForUser,
-  countAccountsForUser,
   getInProgressVisitForUser,
 } from "@/lib/db";
-import { formatDateJP, formatTime, daysSince } from "@/lib/format";
+import { formatDateJP, formatTime } from "@/lib/format";
 import { VISIT_PURPOSE_LABEL } from "@/lib/types";
 import { BadgeVisitStatus } from "@/components/BadgeVisitStatus";
-import { BadgeRank } from "@/components/BadgeRank";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -28,8 +25,6 @@ export default async function HomePage() {
 
   const todayVisits = getVisitsToday(me.id);
   const pending = getPendingNoteVisits(me.id);
-  const dormant = getDormantAccountsForUser(me.id, "A");
-  const total = countAccountsForUser(me.id);
   const inProgress = getInProgressVisitForUser(me.id);
 
   const todayCompleted = todayVisits.filter((v) => v.status === "COMPLETED").length;
@@ -70,7 +65,7 @@ export default async function HomePage() {
       )}
 
       <section
-        className="grid grid-cols-1 sm:grid-cols-3 gap-3"
+        className="grid grid-cols-1 sm:grid-cols-2 gap-3"
         aria-label="今日のサマリ"
       >
         <SummaryCard
@@ -93,14 +88,6 @@ export default async function HomePage() {
           icon={<AlertTriangle className="size-4" />}
           tone={pending.length > 0 ? "warn" : "default"}
         />
-        <SummaryCard
-          label="30日以上停滞 (A)"
-          value={String(dormant.length)}
-          unit="社"
-          hint={`担当 ${total} 社中`}
-          icon={<AlertTriangle className="size-4" />}
-          tone={dormant.length > 0 ? "danger" : "default"}
-        />
       </section>
 
       <section className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -117,7 +104,7 @@ export default async function HomePage() {
           </span>
           <span className="flex-1">
             <span className="block text-base font-semibold">地図で取引先を見る</span>
-            <span className="block text-xs opacity-80">ランク × 停滞で色分け</span>
+            <span className="block text-xs opacity-80">担当エリアを俯瞰</span>
           </span>
           <span aria-hidden="true" className="text-xl">→</span>
         </Link>
@@ -170,7 +157,6 @@ export default async function HomePage() {
                   <span className="flex-1 min-w-0 truncate font-medium">
                     {v.account.name}
                   </span>
-                  <BadgeRank rank={v.account.rank} />
                   {v.purpose && (
                     <span className="hidden sm:inline text-xs text-muted-foreground">
                       {VISIT_PURPOSE_LABEL[v.purpose]}
@@ -179,42 +165,6 @@ export default async function HomePage() {
                 </Link>
               </li>
             ))}
-          </ul>
-        </section>
-      )}
-
-      {dormant.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-sm font-medium text-muted-foreground">
-              停滞中の重要取引先
-            </h2>
-            <Link href="/map" className="text-xs text-brand hover:underline">
-              地図で見る →
-            </Link>
-          </div>
-          <ul className="flex flex-col gap-2">
-            {dormant.map((a) => {
-              const d = daysSince(a.lastVisitAt);
-              return (
-                <li key={a.id}>
-                  <Link
-                    href={`/accounts/${a.id}`}
-                    className={cn(
-                      "flex items-center gap-3 rounded-lg border border-danger/20 bg-danger/5",
-                      "px-3 py-2.5 hover:bg-danger/10 transition-colors",
-                    )}
-                  >
-                    <MapPin className="size-4 text-danger shrink-0" />
-                    <BadgeRank rank={a.rank} />
-                    <span className="flex-1 min-w-0 truncate font-medium">{a.name}</span>
-                    <span className="text-xs tabular-nums text-danger font-semibold">
-                      {d === null ? "未訪問" : `${d}日前`}
-                    </span>
-                  </Link>
-                </li>
-              );
-            })}
           </ul>
         </section>
       )}

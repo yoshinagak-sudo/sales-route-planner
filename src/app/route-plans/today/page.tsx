@@ -4,7 +4,6 @@ import { getCurrentUser } from "@/lib/auth";
 import { getVisitsToday, getRoutePlanForToday } from "@/lib/db";
 import { formatDateJP, formatTime, formatDistance } from "@/lib/format";
 import { VISIT_PURPOSE_LABEL } from "@/lib/types";
-import { BadgeRank } from "@/components/BadgeRank";
 import { BadgeVisitStatus } from "@/components/BadgeVisitStatus";
 import { RouteMap } from "@/components/RouteMap";
 import { cn } from "@/lib/utils";
@@ -166,7 +165,6 @@ export default async function TodayRoutePage() {
                         {formatTime(v.scheduledAt)}
                       </span>
                       <BadgeVisitStatus status={v.status} />
-                      <BadgeRank rank={v.account.rank} />
                     </div>
                     <div
                       className={cn(

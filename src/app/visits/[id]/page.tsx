@@ -10,7 +10,6 @@ import {
 } from "@/lib/format";
 import { VISIT_PURPOSE_LABEL } from "@/lib/types";
 import { BadgeVisitStatus } from "@/components/BadgeVisitStatus";
-import { BadgeRank } from "@/components/BadgeRank";
 import { cn } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
@@ -45,7 +44,6 @@ export default async function VisitDetailPage({
       <header className="flex flex-col gap-2">
         <div className="flex items-center gap-2 flex-wrap">
           <BadgeVisitStatus status={visit.status} />
-          <BadgeRank rank={account.rank} />
           {visit.purpose && (
             <span className="text-xs text-muted-foreground">
               {VISIT_PURPOSE_LABEL[visit.purpose]}

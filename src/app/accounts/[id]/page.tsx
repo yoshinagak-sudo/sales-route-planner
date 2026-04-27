@@ -12,13 +12,8 @@ import {
   formatTime,
   formatMonthDay,
 } from "@/lib/format";
-import {
-  ACCOUNT_RANK_LABEL,
-  VISIT_PURPOSE_LABEL,
-} from "@/lib/types";
-import { BadgeRank } from "@/components/BadgeRank";
+import { VISIT_PURPOSE_LABEL } from "@/lib/types";
 import { BadgeVisitStatus } from "@/components/BadgeVisitStatus";
-import { DormantBanner } from "@/components/DormantBanner";
 import { VisitActionButtons } from "@/components/VisitActionButtons";
 import { getNotesForVisit } from "@/lib/db";
 import { cn } from "@/lib/utils";
@@ -53,43 +48,27 @@ export default async function AccountDetailPage({
         取引先一覧
       </Link>
 
-      {/* ヘッダー: 会社名 + ランク + 経過日数 */}
+      {/* ヘッダー: 会社名 + 経過日数 */}
       <header className="flex flex-col gap-2">
-        <div className="flex items-start gap-3 flex-wrap">
-          <BadgeRank rank={account.rank} size="md" />
-          <h1 className="text-xl sm:text-2xl font-heading font-bold leading-tight flex-1 min-w-0">
-            {account.name}
-          </h1>
-        </div>
+        <h1 className="text-xl sm:text-2xl font-heading font-bold leading-tight">
+          {account.name}
+        </h1>
         <div className="flex items-center gap-3 flex-wrap text-xs">
-          <span className="text-muted-foreground">
-            {ACCOUNT_RANK_LABEL[account.rank]}
-          </span>
           {account.category && (
-            <>
-              <span className="text-muted-foreground/40">/</span>
-              <span className="text-muted-foreground">{account.category}</span>
-            </>
+            <span className="text-muted-foreground">{account.category}</span>
+          )}
+          {account.category && account.owner && (
+            <span className="text-muted-foreground/40">/</span>
           )}
           {account.owner && (
-            <>
-              <span className="text-muted-foreground/40">/</span>
-              <span className="text-muted-foreground">
-                担当: {account.owner.name}
-              </span>
-            </>
+            <span className="text-muted-foreground">
+              担当: {account.owner.name}
+            </span>
           )}
         </div>
         <div className="flex items-baseline gap-2">
           <span className="text-xs text-muted-foreground">最終訪問:</span>
-          <span
-            className={cn(
-              "text-sm font-semibold tabular-nums",
-              days !== null && days >= 60 && account.rank !== "C"
-                ? "text-danger"
-                : "text-foreground",
-            )}
-          >
+          <span className="text-sm font-semibold tabular-nums text-foreground">
             {days === null ? "未訪問" : `${days}日前`}
           </span>
           <span className="text-xs text-muted-foreground tabular-nums">
@@ -97,11 +76,6 @@ export default async function AccountDetailPage({
           </span>
         </div>
       </header>
-
-      {/* 停滞警告 */}
-      {account.rank !== "C" && days !== null && (
-        <DormantBanner days={days} threshold={account.rank === "A" ? 60 : 90} />
-      )}
 
       {/* Primary Actions: 訪問開始 / ナビ / 電話 */}
       <VisitActionButtons
