@@ -4,6 +4,8 @@
 //   node scripts/build-pdf.js
 //
 // 依存: marked, playwright（@dev）
+// Mermaid 対応: ```mermaid フェンスドコードブロックは <div class="mermaid"> 化、
+// ブラウザ内で mermaid CDN 経由で SVG レンダリング後に PDF 化。
 
 const { chromium } = require('playwright');
 const { marked } = require('marked');
@@ -14,6 +16,18 @@ const ROOT = path.resolve(__dirname, '..');
 const MD_PATH = path.join(ROOT, 'docs', 'OVERVIEW.md');
 const HTML_PATH = path.join(ROOT, 'docs', 'OVERVIEW.html');
 const PDF_PATH = path.join(ROOT, 'docs', 'OVERVIEW.pdf');
+
+// ```mermaid フェンス → <div class="mermaid"> 化
+marked.use({
+  renderer: {
+    code(token) {
+      if (token.lang === 'mermaid') {
+        return `<div class="mermaid">${token.text}</div>\n`;
+      }
+      return false;
+    },
+  },
+});
 
 const css = `
 :root {
@@ -108,9 +122,53 @@ a { color: var(--brand); }
 }
 .tagline a { color: var(--accent); }
 
+/* Mermaid 図 */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 14px 0 20px;
+  padding: 12px;
+  background: #fbfaf5;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  page-break-inside: avoid;
+}
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* 印刷時の改ページ制御 */
 h2 { page-break-before: auto; }
-img, table, blockquote { page-break-inside: avoid; }
+img, table, blockquote, .mermaid { page-break-inside: avoid; }
+`;
+
+const mermaidScript = `
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#E5EFE6',
+      primaryTextColor: '#1E4A2A',
+      primaryBorderColor: '#2F6B3D',
+      lineColor: '#2F6B3D',
+      secondaryColor: '#FBEFD3',
+      tertiaryColor: '#F7F6F1',
+      fontFamily: 'Noto Sans JP, Hiragino Sans, Yu Gothic, sans-serif',
+      fontSize: '13px',
+    },
+    flowchart: { htmlLabels: true, curve: 'basis' },
+    securityLevel: 'loose',
+  });
+  try {
+    await mermaid.run({ querySelector: '.mermaid' });
+  } catch (e) {
+    console.error('Mermaid render error:', e);
+  }
+  document.body.dataset.mermaidReady = 'true';
+</script>
 `;
 
 async function main() {
@@ -121,18 +179,20 @@ async function main() {
 
   const md = fs.readFileSync(MD_PATH, 'utf-8');
   const body = marked.parse(md);
+  const hasMermaid = body.includes('class="mermaid"');
 
   const html = `<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>営業訪問プランナー — サービス概要</title>
+  <title>営業管理アプリ — システム概要</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
   <base href="file://${path.join(ROOT, 'docs')}/" />
   <style>${css}</style>
 </head>
 <body>
 ${body}
+${hasMermaid ? mermaidScript : ''}
 </body>
 </html>`;
 
@@ -142,6 +202,18 @@ ${body}
   const browser = await chromium.launch();
   const page = await browser.newPage();
   await page.goto('file://' + HTML_PATH, { waitUntil: 'networkidle' });
+
+  if (hasMermaid) {
+    try {
+      await page.waitForFunction(
+        () => document.body.dataset.mermaidReady === 'true',
+        { timeout: 15000 },
+      );
+      console.log('✓ Mermaid rendered');
+    } catch (e) {
+      console.warn('⚠ Mermaid render timeout, continuing anyway');
+    }
+  }
   await page.waitForTimeout(800);
 
   await page.pdf({

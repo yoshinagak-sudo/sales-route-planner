@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>営業訪問プランナー — サービス概要</title>
+  <title>営業管理アプリ — システム概要</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet" />
   <base href="file:///Users/butaifarm/Desktop/system-dev/sales-route-planner/docs/" />
   <style>
@@ -98,9 +98,25 @@ a { color: var(--brand); }
 }
 .tagline a { color: var(--accent); }
 
+/* Mermaid 図 */
+.mermaid {
+  display: flex;
+  justify-content: center;
+  margin: 14px 0 20px;
+  padding: 12px;
+  background: #fbfaf5;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  page-break-inside: avoid;
+}
+.mermaid svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* 印刷時の改ページ制御 */
 h2 { page-break-before: auto; }
-img, table, blockquote { page-break-inside: avoid; }
+img, table, blockquote, .mermaid { page-break-inside: avoid; }
 </style>
 </head>
 <body>
@@ -131,6 +147,66 @@ docs/OVERVIEW.pdf を再生成 → git commit & push でクライアント
 <li><strong>過去の商談が頭から消える</strong>: 半年ぶりの取引先に行く前に「最後に何を話したか」を電話で同僚に確認している</li>
 </ul>
 <hr>
+<h2>システムの全体像</h2>
+<p>担当者の操作は <strong>取引先選択 → 訪問記録 → 履歴閲覧</strong> の 3 ステップで完結し、管理者向けには横断ダッシュボードでチームの活動状況を集約します。</p>
+<div class="mermaid">flowchart LR
+    A[ホーム<br/>今日の訪問・停滞バッジ] --> B[取引先マップ]
+    A --> G[今日のルート<br/>地図＋順序ピン]
+    A --> H[管理ダッシュボード<br/>全営業の活動把握]
+    B --> C[取引先詳細<br/>商談タイムライン]
+    G --> C
+    C --> D[訪問を開始]
+    D --> E[訪問記録クイック<br/>メモ＋AI補完]
+    E --> F[訪問を終了]
+    F --> A</div>
+<p><strong>設計上の不変則</strong></p>
+<ul>
+<li><strong>メモは1フォーム完結</strong>: メモを書いて「AI で補完」を押すと用件と次のアクションが自動入力、30秒以内で記録が終わる</li>
+<li><strong>訪問記録は IN_PROGRESS のみ編集可</strong>: 訪問終了後は閲覧専用、誤更新を物理的に防ぐ</li>
+<li><strong>マスタの編集導線は管理画面に一本化</strong>: 取引先 / 連絡先 / 担当者の更新経路を1つに集約</li>
+<li><strong>位置情報は訪問時のみ取得</strong>: 移動中の連続トラッキングは行わない</li>
+</ul>
+<p><strong>構成画面の役割</strong></p>
+<table>
+<thead>
+<tr>
+<th>画面</th>
+<th>役割</th>
+<th>主な利用者</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ホーム</td>
+<td>今日の訪問・未記録・停滞バッジを集約</td>
+<td>営業担当</td>
+</tr>
+<tr>
+<td>取引先マップ</td>
+<td>地図上で取引先を俯瞰、ランク × 停滞日数の2軸ピン色分け</td>
+<td>営業担当</td>
+</tr>
+<tr>
+<td>取引先一覧 / 詳細</td>
+<td>基本情報・訪問履歴・進行中商談・主要担当者を1画面に</td>
+<td>営業担当</td>
+</tr>
+<tr>
+<td>今日のルート</td>
+<td>当日の訪問予定を地図と時刻順カードで表示</td>
+<td>営業担当</td>
+</tr>
+<tr>
+<td>訪問記録クイック</td>
+<td>メモから AI が用件・次のアクションを補完</td>
+<td>営業担当</td>
+</tr>
+<tr>
+<td>管理ダッシュボード</td>
+<td>全営業の KPI / 活動表 / 停滞アカウント横断</td>
+<td>営業マネージャー</td>
+</tr>
+</tbody></table>
+<hr>
 <h2>概要画面</h2>
 <p><img src="screenshots/desktop-home.png" alt="ホーム画面"></p>
 <p>ホームには「今日の訪問」「未記録の訪問」「30日以上停滞している重要取引先」の3バッジが並びます。停滞バッジが赤で点灯していれば、その日のうちに優先して訪問すべき取引先がいるサインです。下部には今日のルートと停滞中の取引先一覧が時刻順・経過日数順で並びます。</p>
@@ -153,6 +229,33 @@ docs/OVERVIEW.pdf を再生成 → git commit & push でクライアント
 <h3>6. 管理者向けダッシュボード</h3>
 <p><img src="screenshots/desktop-admin.png" alt="管理者ダッシュボード"></p>
 <p>営業マネージャー・管理者向けに、全営業の活動状況を1画面で把握できるダッシュボードを提供。本日の訪問予定数、未記録の訪問件数、停滞中の重要取引先、進行中の商談一覧、過去7日間の活動量サマリーを横断表示します。営業ごとの活動表で「誰の訪問数が少ないか」「どの取引先が長く接触されていないか」がすぐにわかります。</p>
+
+
+<script type="module">
+  import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+  mermaid.initialize({
+    startOnLoad: false,
+    theme: 'base',
+    themeVariables: {
+      primaryColor: '#E5EFE6',
+      primaryTextColor: '#1E4A2A',
+      primaryBorderColor: '#2F6B3D',
+      lineColor: '#2F6B3D',
+      secondaryColor: '#FBEFD3',
+      tertiaryColor: '#F7F6F1',
+      fontFamily: 'Noto Sans JP, Hiragino Sans, Yu Gothic, sans-serif',
+      fontSize: '13px',
+    },
+    flowchart: { htmlLabels: true, curve: 'basis' },
+    securityLevel: 'loose',
+  });
+  try {
+    await mermaid.run({ querySelector: '.mermaid' });
+  } catch (e) {
+    console.error('Mermaid render error:', e);
+  }
+  document.body.dataset.mermaidReady = 'true';
+</script>
 
 </body>
 </html>
