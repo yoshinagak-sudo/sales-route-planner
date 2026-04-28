@@ -53,8 +53,8 @@ function buildDivIcon(fill: string, stroke: string): L.DivIcon {
 
 export function AccountMap({
   accounts,
-  centerLat = 35.6812,
-  centerLng = 139.7671,
+  centerLat = 33.3194,
+  centerLng = 130.5092,
   zoom = 11,
 }: Props) {
   // SSR 中は Leaflet を初期化しない。クライアント mount 後に地図描画。

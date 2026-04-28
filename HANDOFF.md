@@ -1,71 +1,52 @@
 # sales-route-planner - 引き継ぎ
 
-最終更新: 2026-04-25
+最終更新: 2026-04-27
 
 ## 現在の状態
-- **方針: 他クライアント向けのデモ提案アプリ。実 DB なし、mock データで完結**
-- **Next.js 16 + Tailwind v4 + shadcn/ui + Server Actions** で実装中
-- ✅ 土台と Home / Map はビルド成功、画面が表示できる状態
-- ⏳ ui-designer がバックグラウンドで残り 6 画面実装中（accounts 一覧・詳細 / visits 詳細・記録 / today ルート / admin）
-- ❌ 永続化なし（再起動でデータ初期化）。本番化したい時は Phase 2 で DB 接続を復活させる
+- **クライアント提案用デモアプリ。Next.js 16 + Tailwind v4 + shadcn/ui + Server Actions、mock データ完結（DB なし）**
+- ✅ Phase 1 全機能実装済み（Home / 取引先マップ・一覧・詳細 / 訪問詳細・記録クイック / 今日のルート（地図ルート線つき） / 管理ダッシュボード）
+- ✅ 概要書（OVERVIEW.md / OVERVIEW.pdf）GitHub Public 公開済み
+- ✅ 訪問記録の AI 補完機能（メモ → 用件・次のアクション自動入力）。`src/lib/ai-stub.ts` のルールベース、Phase 2 で Gemini API 差し替え可
+- ✅ 業種・地域は **産廃業者 / 久留米市拠点** に切替（建築・リフォーム・解体・工場・オフィスビル系の取引先10件）
 
 ## 直近の決定事項
-- **Prisma / Supabase / API Route は除去**（switch-user 1 本だけ残置）
-- **データソース**: `src/lib/mock-data.ts`（仙台10取引先・営業2名・訪問8件・ノート5件・ルート1件、実行時刻基準で相対日付生成 → acc-010 が常に 162 日前で停滞バッジ点灯）
-- **データ取得**: Server Component から `src/lib/db.ts` のヘルパー関数を直呼び
-- **データ更新**: `"use server"` の Server Action（`src/lib/actions.ts`）。`startVisitAtAccountAction / startVisitAction / finishVisitAction / addNoteAction`
-- **認証**: cookie の `demo_user_id` または fallback で `usr-01`（山田太郎）
-- **Google Maps API キー未設定でも動く**: `AccountMap` がフォールバックリスト UI を出す
-- **Prisma v7 は破壊的変更で v6 に固定 → さらに撤去**（DB が必要になったら戻す）
-- **デザイン**: Primary `#2F6B3D` / Accent `#E8A83A` を Tailwind v4 `@theme` で定義済み（既存）
+- **アプリ名**: `営業管理アプリ`（layout / OVERVIEW / README 統一）
+- **業態**: 産廃業者（久留米市）。営業先は建築/リフォーム/解体/工場/オフィスビル
+- **AppSheet 不採用 → Web アプリ採用**: 画面自由度・人数による費用なし・スプレッドシート連携も後付け可能、を訴求点として概要書に明記
+- **ランク (A/B/C) と停滞日数判定の表示は全 UI から削除**（混乱回避）。データ層 (types/mock-data/db) は維持して復活可能
+- **音声入力なし**: フォーム入力＋ AI 補完で 1 分以内記録
+- **概要書のスコープ**: 課題 / システムの全体像 / 概要画面 / 営業担当ができること / 管理者ができること の5要素のみ。技術構成・法令・コスト・触り方・デモURL注記は書かない
+- **配布**: GitHub Public + raw URL で PDF 共有
 
 ## 次の一手
-1. ui-designer 完了を待つ（残り 6 画面 + 既存 VisitActionButtons/VoiceRecorder の Server Action 化）
-2. `npm run build` 通過確認
-3. `npm run dev` → http://localhost:3000 でデモ動線（90秒シナリオ）通し確認
-4. ユーザー提示・調整
-5. 必要なら Vercel に1クリックデプロイ（DB 不要なので Hobby で動く）
-6. Phase 2 で DB 復活を希望する場合: `src/lib/prisma.ts` 再生成 + API Route 戻し + `src/lib/db.ts` ヘルパーを Prisma 経由に切替
+1. 産廃版での `npm run build` 通過確認
+2. スクショ取り直し（久留米市の地図、産廃業界の取引先名・商談メモ）
+3. OVERVIEW.pdf 再生成 → GitHub に push
+4. クライアントへ概要書 URL 共有
 
 ## 未解決の課題・ハマりどころ
-- **永続化なし**: サーバー再起動 / Hot Reload でデータ初期化される。デモには十分だが、複数日のクライアント提示で同じ状態を保ちたい場合は要対策
-- **Google Maps APIキー無し**: `/map` はフォールバックリスト UI で動く。実マップを見せたい時は `.env.local` に `NEXT_PUBLIC_GOOGLE_MAPS_CLIENT_KEY` を設定（GCP コンソールで発行手順は secretary 提示済）
-- **Vercel multiple lockfiles 警告**: `/Users/butaifarm/package-lock.json` と本プロジェクトの両方が検出されている。気になれば `next.config.ts` で `turbopack.root` 設定
-- Prisma init で生成された `prisma.config.ts` を削除済み（Prisma v7 用、v6 では不要）
+- **dev サーバが時々停止**（バックグラウンド起動だがセッション切替で落ちる）→ `pkill -f "next dev"` してから `npm run dev` 再起動
+- **3001 が他プロジェクトと衝突**することあり → 3000 が空いていれば自動的に 3000 で起動。`SCREENSHOT_BASE_URL=http://localhost:3000 npm run overview:rebuild`
+- **GitHub Web で md 編集すると PDF が古いまま**。完全自動化したいなら GitHub Actions で `npm run overview:pdf` を組み込む（未実装）
+- **mock-data の今日の日付計算は実行時刻基準** → `daysAgo(n)` で経過日数が常に最新に追従
 
 ## 重要なコマンド・URL
 ```bash
 cd /Users/butaifarm/Desktop/system-dev/sales-route-planner
-
-# 開発
-npm run dev       # http://localhost:3000
-
-# ビルド
-npm run build
-
-# クライアント別データ差し替え
-# src/lib/mock-data.ts を直接編集（or 別ファイルにして import 切替）
+npm run dev                                # http://localhost:3000
+npm run build                              # ビルド確認
+npm run overview:pdf                       # OVERVIEW.md → PDF
+SCREENSHOT_BASE_URL=http://localhost:3000 npm run overview:rebuild
+                                           # スクショ + PDF を一括再生成
+git push origin main                       # 概要書を GitHub Public に反映
 ```
 
-### 主要ファイル
-- データ: `src/lib/mock-data.ts`
-- 取得: `src/lib/db.ts`
-- 更新: `src/lib/actions.ts`
-- 型: `src/lib/types.ts`
-- 認証: `src/lib/auth.ts`
-- フォーマッタ: `src/lib/format.ts`
+### 公開 URL
+- 概要書 PDF: https://github.com/yoshinagak-sudo/sales-route-planner/raw/main/docs/OVERVIEW.pdf
+- 概要書 Markdown: https://github.com/yoshinagak-sudo/sales-route-planner/blob/main/docs/OVERVIEW.md
+- リポジトリ: https://github.com/yoshinagak-sudo/sales-route-planner
 
-### 設計書
-- 採用版: `docs/design/sales-route-planner-webapp.md`
-- 却下版: `docs/design/sales-route-planner.md`（CRM共有案）/ `docs/design/sales-route-planner-appsheet.md`（AppSheet案）
-- UX brief: `docs/design/appsheet-ux-brief.md`
-- 企画書 HTML（提案先共有用）: `docs/proposal.html`
-- AppSheet デモ手順書: `docs/demo-setup-guide.md` / `docs/demo-setup-guide-part2.md`（過去案、参考用）
-
-## デモシナリオ（90秒）
-1. Home: 「停滞 1社」赤バッジ点灯
-2. 取引先マップ: 焼肉 大吉（acc-010）が赤ピン or fallback で目立つ
-3. acc-010 タップ → 詳細「162日前」赤強調
-4. 「✓ 訪問を開始」→ Visit Record クイックフォーム
-5. メモ入力 + 「✓ 訪問を終了する」→ Home に戻り件数更新
-6. 今日のルート Deck で時刻順に並ぶ
+### 編集の流れ（軽微な文言修正）
+1. `docs/OVERVIEW.md` を直接編集
+2. `npm run overview:pdf`
+3. `git add docs/ && git commit -m "..." && git push`
